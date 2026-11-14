@@ -1,0 +1,743 @@
+/* =====================================================================
+   HS TECH: design system Nuxt (design.nuxt.md) traduzido para CSS puro.
+   Tokens = variáveis --ui-*. Componentes usam só tokens, nunca hex.
+   Tema escuro como padrão.
+   ===================================================================== */
+@import url('tokens.css');
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; background: var(--ui-bg); color: var(--ui-text); font: 400 var(--text-sm)/1.5 var(--font-sans); overflow: hidden; }
+button, input, select { font: inherit; color: inherit; }
+::selection { background: color-mix(in oklab, var(--ui-primary) 35%, transparent); color: var(--ui-text-highlighted); }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-thumb { background: var(--ui-bg-accented); border-radius: var(--radius-full); border: 2px solid var(--ui-bg); }
+::-webkit-scrollbar-track { background: transparent; }
+h1, h2, h3, b, strong { color: var(--ui-text-highlighted); }
+
+/* Anel de foco visível (o design pede outline-primary; usamos opacidade total para manter 3:1 no fundo navy) */
+:focus { outline: none; }
+:focus-visible { outline: 2px solid var(--ui-focus); outline-offset: 2px; border-radius: var(--radius-md); }
+.switch input:focus-visible + span { outline: 2px solid var(--ui-focus); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; scroll-behavior: auto !important; }
+}
+
+/* ---------- Layout ---------- */
+.titlebar { position: fixed; inset: 0 0 auto 0; height: 38px; -webkit-app-region: drag; display: flex; align-items: center; gap: var(--space-2); padding-left: var(--space-4); z-index: 50; background: var(--ui-bg); border-bottom: 1px solid var(--ui-border); }
+.titlebar img { width: 20px; height: 20px; }
+.titlebar .brand { font-weight: 700; letter-spacing: .06em; font-size: var(--text-sm); color: var(--ui-text-highlighted); }
+.titlebar .brand span { color: var(--ui-primary); }
+.titlebar .admin { -webkit-app-region: no-drag; margin-left: var(--space-2); font-size: var(--text-xs); font-weight: 600; padding: 2px var(--space-2); border-radius: var(--radius-md); border: 1px solid transparent; background: none; }
+.titlebar .admin.ok { color: var(--ui-success); border-color: color-mix(in oklab, var(--ui-success) 30%, transparent); background: color-mix(in oklab, var(--ui-success) 10%, transparent); }
+.titlebar .admin.no { color: var(--ui-warning); border-color: color-mix(in oklab, var(--ui-warning) 35%, transparent); background: color-mix(in oklab, var(--ui-warning) 10%, transparent); cursor: pointer; }
+
+.app { position: fixed; inset: 38px 0 0 0; display: grid; grid-template-columns: 236px 1fr; }
+.sidebar { background: var(--ui-bg); border-right: 1px solid var(--ui-border); overflow-y: auto; padding: var(--space-3) var(--space-2) var(--space-5); }
+.nav-group { margin-top: var(--space-4); }
+.nav-group:first-child { margin-top: var(--space-1); }
+.nav-title { font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--ui-text-muted); padding: 0 var(--space-3) var(--space-2); }
+.nav a { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); color: var(--ui-text-muted); text-decoration: none; cursor: pointer; font-size: var(--text-sm); font-weight: 500; transition: background var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
+.nav a svg { width: 18px; height: 18px; flex: none; }
+.nav a:hover { background: var(--ui-bg-elevated); color: var(--ui-text-highlighted); }
+.nav a.active { background: color-mix(in oklab, var(--ui-primary) 10%, transparent); color: var(--ui-primary); }
+
+/* Container de 90rem centralizado */
+.main { overflow-y: auto; padding: var(--space-6) max(var(--space-8), calc((100% - var(--ui-container)) / 2)) var(--space-16); }
+.page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: var(--space-4); margin-bottom: var(--space-5); flex-wrap: wrap; }
+.page-head h1 { margin: 0; font-size: var(--text-2xl); font-weight: 600; letter-spacing: -.01em; }
+.page-head p { margin: var(--space-1) 0 0; color: var(--ui-text-muted); max-width: 760px; }
+.page-head .actions { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+
+/* ---------- Cartões ---------- */
+.card { background: var(--ui-bg-elevated); border: 1px solid var(--ui-border); border-radius: var(--radius-lg); padding: var(--space-5); }
+.card h2, .card h3 { margin: 0 0 var(--space-3); font-size: var(--text-base); font-weight: 600; }
+.card .sub { color: var(--ui-text-muted); font-size: var(--text-sm); margin: calc(var(--space-1) * -1) 0 var(--space-3); }
+.hero { background: var(--ui-bg-elevated); border-color: var(--ui-border-accented); border-radius: var(--radius-2xl); }
+.grid { display: grid; gap: var(--space-4); }
+.g2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.g3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.g4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 1280px) { .g4 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .g3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.mt { margin-top: var(--space-4); } .mt2 { margin-top: var(--space-6); } .mb { margin-bottom: var(--space-4); }
+.row { display: flex; align-items: center; gap: var(--space-2); flex-wrap: wrap; }
+.row.between { justify-content: space-between; }
+.spacer { flex: 1; }
+.muted { color: var(--ui-text-muted); } .dim { color: var(--ui-text-dimmed); } /* .dim só para texto desabilitado/placeholder (contraste abaixo de AA) */ .small { font-size: 13px; }
+.mono { font-family: var(--font-mono); font-size: 12.5px; }
+.hidden { display: none !important; }
+
+/* ---------- Botões: primário, secundário (neutral subtle), ghost, erro ---------- */
+.btn { display: inline-flex; align-items: center; gap: var(--space-2); padding: 7px var(--space-3); border-radius: var(--radius-md); cursor: pointer; font-weight: 500; font-size: var(--text-sm); white-space: nowrap; transition: background var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+  /* secundário: color="neutral" variant="subtle" */
+  background: var(--ui-bg-elevated); color: var(--ui-text); border: 1px solid var(--ui-border-accented); }
+.btn:hover { background: var(--ui-bg-accented); color: var(--ui-text-highlighted); }
+.btn svg { width: 16px; height: 16px; flex: none; }
+.btn.primary { background: var(--ui-primary); color: var(--ui-text-inverted); border-color: transparent; }
+.btn.primary:hover { background: var(--ui-primary-hover); }
+.btn.ghost { background: transparent; border-color: transparent; color: var(--ui-text-muted); }
+.btn.ghost:hover { background: var(--ui-bg-elevated); color: var(--ui-text-highlighted); }
+.btn.danger { background: var(--ui-error); color: var(--ui-text-inverted); border-color: transparent; }
+.btn.danger:hover { background: color-mix(in oklab, var(--ui-error) 85%, var(--ui-bg)); }
+.btn.sm { padding: 5px 10px; font-size: 13px; }
+.btn[disabled] { opacity: .5; pointer-events: none; }
+.btn .spin { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: var(--radius-full); animation: spin 700ms linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ---------- Badges (estado sempre com texto, nunca só cor) ---------- */
+.badge { display: inline-flex; align-items: center; gap: var(--space-1); padding: 2px var(--space-2); border-radius: var(--radius-md); font-size: var(--text-xs); font-weight: 500; background: var(--ui-bg-accented); color: var(--ui-text-toned); border: 1px solid var(--ui-border-accented); }
+.badge.ok { color: var(--ui-success); border-color: color-mix(in oklab, var(--ui-success) 30%, transparent); background: color-mix(in oklab, var(--ui-success) 10%, transparent); }
+.badge.warn { color: var(--ui-warning); border-color: color-mix(in oklab, var(--ui-warning) 30%, transparent); background: color-mix(in oklab, var(--ui-warning) 10%, transparent); }
+.badge.bad { color: var(--ui-error); border-color: color-mix(in oklab, var(--ui-error) 35%, transparent); background: color-mix(in oklab, var(--ui-error) 10%, transparent); }
+.badge.info { color: var(--ui-info); border-color: color-mix(in oklab, var(--ui-info) 30%, transparent); background: color-mix(in oklab, var(--ui-info) 10%, transparent); }
+.badge.violet { color: var(--ui-important); border-color: color-mix(in oklab, var(--ui-important) 35%, transparent); background: color-mix(in oklab, var(--ui-important) 10%, transparent); }
+
+.dot { width: 9px; height: 9px; border-radius: var(--radius-full); display: inline-block; flex: none; background: var(--ui-border-accented); }
+.dot.ok { background: var(--ui-success); } .dot.warn { background: var(--ui-warning); } .dot.bad { background: var(--ui-error); } .dot.info { background: var(--ui-info); }
+
+/* ---------- Formulários (UInput) ---------- */
+input[type=text], input[type=number], input[type=search], select { background: var(--ui-bg); color: var(--ui-text-highlighted); border: 1px solid var(--ui-border-control); border-radius: var(--radius-md); padding: 7px 10px; outline: none; min-width: 0; }
+input::placeholder { color: var(--ui-text-dimmed); }
+input:focus-visible, select:focus-visible { border-color: var(--ui-primary); outline: 2px solid color-mix(in oklab, var(--ui-primary) 35%, transparent); outline-offset: 0; }
+select option { background: var(--ui-bg-elevated); }
+input[type=range], input[type=checkbox], input[type=radio] { accent-color: var(--ui-primary); }
+input[type=checkbox] { width: 16px; height: 16px; }
+label.check { display: inline-flex; align-items: center; gap: var(--space-2); cursor: pointer; }
+
+.switch { position: relative; width: 40px; height: 22px; flex: none; }
+.switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.switch span { position: absolute; inset: 0; background: var(--ui-bg-accented); border: 1px solid var(--ui-border-control); border-radius: var(--radius-full); pointer-events: none; transition: background var(--dur-micro) var(--ease-out), border-color var(--dur-micro) var(--ease-out); }
+.switch span::after { content: ""; position: absolute; left: 2px; top: 2px; width: 16px; height: 16px; border-radius: var(--radius-full); background: var(--ui-text-muted); transition: transform var(--dur-short) var(--ease-out), background var(--dur-micro) var(--ease-out); }
+.switch input:checked + span { background: var(--ui-primary); border-color: transparent; }
+.switch input:checked + span::after { transform: translateX(18px); background: var(--ui-text-inverted); }
+.switch input:disabled + span { opacity: .45; }
+
+/* ---------- Abas ---------- */
+.tabs { display: flex; gap: var(--space-1); border-bottom: 1px solid var(--ui-border); margin-bottom: var(--space-4); flex-wrap: wrap; }
+.tabs button { background: none; border: 0; padding: var(--space-2) var(--space-3); cursor: pointer; color: var(--ui-text-muted); border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500; }
+.tabs button:hover { color: var(--ui-text-highlighted); }
+.tabs button.active { color: var(--ui-text-highlighted); border-bottom-color: var(--ui-primary); }
+.tabs button { transition: color var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+
+/* ---------- Listas e tabelas ---------- */
+.list { display: flex; flex-direction: column; }
+.item { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-1); border-bottom: 1px solid var(--ui-border-muted); }
+.item:last-child { border-bottom: 0; }
+.item .grow { flex: 1; min-width: 0; }
+.item .title { font-weight: 600; color: var(--ui-text-highlighted); }
+.item .desc { color: var(--ui-text-muted); font-size: 13px; margin-top: 2px; }
+.ellipsis { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+table.tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tbl th { text-align: left; color: var(--ui-text-muted); font-weight: 600; font-size: var(--text-xs); text-transform: uppercase; letter-spacing: .06em; padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--ui-border); position: sticky; top: 0; background: var(--ui-bg-elevated); }
+.tbl td { padding: var(--space-2) var(--space-3); border-bottom: 1px solid var(--ui-border-muted); vertical-align: middle; }
+.tbl tr:hover td { background: var(--ui-bg-accented); }
+.scroll { max-height: 460px; overflow: auto; }
+
+.log { background: var(--ui-bg); border: 1px solid var(--ui-border); border-radius: var(--radius-md); padding: var(--space-3); height: 220px; overflow: auto; font: 12.5px/1.55 var(--font-mono); color: var(--ui-text-toned); white-space: pre-wrap; word-break: break-word; }
+.log:empty::before { content: "As mensagens aparecem aqui."; color: var(--ui-text-muted); }
+.log .ok { color: var(--ui-success); } .log .err { color: var(--ui-error); } .log .step { color: var(--ui-text-highlighted); font-weight: 600; }
+
+.progress { height: 8px; background: var(--ui-bg-accented); border-radius: var(--radius-full); overflow: hidden; }
+.progress > div { height: 100%; width: 0; background: var(--ui-primary); border-radius: var(--radius-full); transition: width var(--dur-medium) var(--ease-out); }
+
+.stat { display: flex; flex-direction: column; gap: 2px; }
+.stat .label { color: var(--ui-text-muted); font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.stat .value { font-size: 26px; font-weight: 700; letter-spacing: -.02em; color: var(--ui-text-highlighted); }
+.stat .value small { font-size: 13px; color: var(--ui-text-muted); font-weight: 500; margin-left: 3px; }
+.stat .small { white-space: pre-line; }
+
+.kv { display: grid; grid-template-columns: 140px 1fr; gap: var(--space-2) var(--space-4); font-size: 13.5px; }
+.kv div:nth-child(odd) { color: var(--ui-text-muted); }
+.kv > div { min-width: 0; overflow-wrap: anywhere; }
+
+.empty { text-align: center; padding: var(--space-10) var(--space-3); color: var(--ui-text-muted); }
+.callout { border: 1px solid var(--ui-border-accented); background: var(--ui-bg-muted); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); font-size: 13.5px; color: var(--ui-text); border-left: 3px solid var(--ui-info); }
+.callout.warn { border-color: color-mix(in oklab, var(--ui-warning) 35%, transparent); border-left-color: var(--ui-warning); background: color-mix(in oklab, var(--ui-warning) 6%, var(--ui-bg-muted)); }
+.callout.danger { border-color: color-mix(in oklab, var(--ui-error) 40%, transparent); border-left-color: var(--ui-error); background: color-mix(in oklab, var(--ui-error) 6%, var(--ui-bg-muted)); }
+
+/* Gauge */
+.gauge { position: relative; width: 120px; height: 120px; }
+.gauge svg { transform: rotate(-90deg); }
+.gauge .gv { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.gauge .gv b { font-size: var(--text-2xl); letter-spacing: -.02em; }
+.gauge .gv span { color: var(--ui-text-muted); font-size: var(--text-xs); }
+
+.chart { width: 100%; height: 120px; display: block; }
+
+/* Toast: ícone + título do tipo + mensagem + barra do tempo restante */
+.toasts { position: fixed; right: var(--space-4); bottom: var(--space-4); display: flex; flex-direction: column; gap: var(--space-2); z-index: 200; }
+.toast { --tone: var(--ui-info); position: relative; display: grid; grid-template-columns: auto 1fr auto; gap: var(--space-3); align-items: start;
+  background: var(--ui-bg-elevated); color: var(--ui-text-highlighted); border: 1px solid var(--ui-border-accented); border-left: 3px solid var(--tone);
+  padding: var(--space-3) var(--space-3) var(--space-4) var(--space-4); border-radius: var(--radius-lg); box-shadow: var(--ui-shadow); width: 400px; max-width: calc(100vw - var(--space-8));
+  overflow: hidden; animation: tin var(--dur-short) var(--ease-out);
+  transition: opacity 160ms var(--ease-in), transform 160ms var(--ease-in), height var(--dur-short) var(--ease-in-out), padding var(--dur-short) var(--ease-in-out), margin var(--dur-short) var(--ease-in-out), border-width var(--dur-short) var(--ease-in-out); }
+.toast.ok { --tone: var(--ui-success); } .toast.error { --tone: var(--ui-error); } .toast.warn { --tone: var(--ui-warning); }
+.toast-icon { width: 28px; height: 28px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: var(--tone); background: color-mix(in oklab, var(--tone) 15%, transparent); }
+.toast-icon svg { width: 16px; height: 16px; stroke-width: 2.4; }
+.toast-title { font-weight: 600; font-size: 13px; color: var(--tone); }
+.toast-msg { font-size: 13.5px; color: var(--ui-text-highlighted); margin-top: 2px; }
+.toast-close { background: none; border: 0; color: var(--ui-text-muted); cursor: pointer; padding: 2px; border-radius: var(--radius-sm); }
+.toast-close:hover { color: var(--ui-text-highlighted); background: var(--ui-bg-accented); }
+.toast-close svg { width: 14px; height: 14px; }
+.toast-bar { position: absolute; left: 0; bottom: 0; height: 3px; width: 100%; background: var(--tone); opacity: .7; transform-origin: left; animation: toast-time linear forwards; }
+.toast.leaving { opacity: 0; transform: translateX(16px); height: 0 !important; padding-top: 0; padding-bottom: 0; margin-top: calc(var(--space-2) * -1); border-top-width: 0; border-bottom-width: 0; }
+@keyframes tin { from { opacity: 0; transform: translateX(16px); } }
+@keyframes toast-time { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+/* ---------- Feedback de ação ---------- */
+/* 1) Imediato: botão afunda e solta uma onda a partir do clique */
+.btn, .tabs button, .nav a, .game, .thread { position: relative; overflow: hidden; isolation: isolate; }
+.btn { transition: background var(--dur-short) var(--ease-out), border-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out), transform var(--dur-micro) var(--ease-out), box-shadow var(--dur-short) var(--ease-out); }
+.btn:active:not([disabled]), .btn.key-press { transform: scale(.96); }
+.press-ripple { position: absolute; border-radius: var(--radius-full); pointer-events: none; z-index: -1; background: currentColor; opacity: .28; transform: scale(0); animation: ripple 380ms var(--ease-out) forwards; }
+.btn.primary .press-ripple, .btn.danger .press-ripple { background: var(--ui-color-white); opacity: .45; }
+@keyframes ripple { to { transform: scale(1); opacity: 0; } }
+
+/* 2) Em andamento: mantém a largura, mostra spinner */
+.btn.state-busy { cursor: progress; }
+.btn[disabled].state-busy { opacity: .85; }
+
+/* 3) Ao terminar: o próprio botão confirma o resultado por alguns segundos */
+.btn.state-done { background: color-mix(in oklab, var(--ui-success) 16%, var(--ui-bg-elevated)); border-color: var(--ui-success); color: var(--ui-success);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ui-success) 18%, transparent); animation: pop var(--dur-medium) var(--ease-emphasis); }
+.btn.primary.state-done { background: var(--ui-primary); color: var(--ui-text-inverted); border-color: transparent; }
+.btn.state-fail { background: color-mix(in oklab, var(--ui-error) 14%, var(--ui-bg-elevated)); border-color: var(--ui-error); color: var(--ui-error);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ui-error) 18%, transparent); animation: shake 300ms var(--ease-in-out); }
+.btn.state-done svg, .btn.state-fail svg { stroke-width: 2.6; }
+@keyframes pop { 0% { transform: scale(.94); } 60% { transform: scale(1.04); } 100% { transform: scale(1); } }
+@keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-4px); } 40% { transform: translateX(4px); } 60% { transform: translateX(-3px); } 80% { transform: translateX(2px); } }
+
+/* Modal */
+.modal-bg { position: fixed; inset: 0; background: color-mix(in oklab, var(--ui-bg) 75%, transparent); display: flex; align-items: center; justify-content: center; z-index: 150; backdrop-filter: blur(3px); }
+.modal { width: min(560px, 92vw); max-height: 86vh; overflow: auto; background: var(--ui-bg-elevated); border: 1px solid var(--ui-border-accented); border-radius: var(--radius-xl); padding: var(--space-6); box-shadow: var(--ui-shadow); }
+.modal h3 { margin: 0 0 var(--space-2); font-size: var(--text-lg); font-weight: 600; }
+.modal .body { color: var(--ui-text); }
+.modal .foot { display: flex; justify-content: flex-end; gap: var(--space-2); margin-top: var(--space-5); }
+
+/* Jogos */
+.games { display: grid; grid-template-columns: repeat(auto-fill, minmax(232px, 1fr)); gap: var(--space-3); }
+.game { background: var(--ui-bg-elevated); border: 1px solid var(--ui-border); border-radius: var(--radius-lg); padding: var(--space-4); cursor: pointer; transition: border-color var(--dur-short) var(--ease-out), background var(--dur-short) var(--ease-out); display: flex; flex-direction: column; gap: var(--space-2); }
+.game:hover { border-color: var(--ui-border-accented); background: var(--ui-bg-accented); }
+.game.sel { border-color: var(--ui-primary); box-shadow: 0 0 0 1px var(--ui-primary) inset; }
+.game .name { font-weight: 600; color: var(--ui-text-highlighted); }
+.threads { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.thread { width: 36px; height: 36px; border-radius: var(--radius-md); border: 1px solid var(--ui-border-control); background: var(--ui-bg); display: flex; align-items: center; justify-content: center; font-size: var(--text-xs); cursor: pointer; user-select: none; color: var(--ui-text-muted); }
+.thread.on { background: color-mix(in oklab, var(--ui-primary) 15%, transparent); border-color: var(--ui-primary); color: var(--ui-text-highlighted); }
+.thread.e { border-style: dashed; }
+
+/* Pontuação */
+.score-big { font-size: var(--text-5xl); font-weight: 800; letter-spacing: -.03em; color: var(--ui-primary); line-height: 1; }
+
+/* Testes de tela */
+.fullscreen-test { position: fixed; inset: 0; z-index: 300; cursor: none; }
+.fs-hint { position: fixed; left: 50%; bottom: var(--space-8); transform: translateX(-50%); background: color-mix(in oklab, var(--ui-bg) 85%, transparent); color: var(--ui-text-highlighted); padding: var(--space-2) var(--space-4); border-radius: var(--radius-full); font-size: 13px; z-index: 301; pointer-events: none; }
+.mouse-pad { height: 260px; border: 1px dashed var(--ui-border-accented); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--ui-text-muted); user-select: none; background: var(--ui-bg-muted); }
+.btns-mouse { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-2); }
+.mbtn { border: 1px solid var(--ui-border-accented); border-radius: var(--radius-md); padding: var(--space-3); text-align: center; background: var(--ui-bg); }
+.mbtn.down { border-color: var(--ui-primary); background: color-mix(in oklab, var(--ui-primary) 14%, transparent); }
+.mbtn b { display: block; font-size: var(--text-xl); }
+.key { display: inline-block; min-width: 34px; padding: 6px var(--space-2); margin: 3px; border: 1px solid var(--ui-border-accented); border-radius: var(--radius-md); background: var(--ui-bg); text-align: center; font-size: var(--text-xs); color: var(--ui-text-muted); }
+.key.hit { border-color: var(--ui-success); background: color-mix(in oklab, var(--ui-success) 14%, transparent); color: var(--ui-text-highlighted); }
+
+/* Tons de status para usar em textos (classe em vez de cor inline) */
+.c-ok { color: var(--ui-success); } .c-warn { color: var(--ui-warning); } .c-bad { color: var(--ui-error); } .c-primary { color: var(--ui-primary); }
+
+
+/* ---------- Coreografia de entrada (princípios de animação) ----------
+   Ao abrir uma página, os blocos entram em sequência: o mais importante (título) primeiro,
+   escalonados em 40 ms, sempre de baixo para cima. Máximo de 8 passos: 8 × 40 + 280 ≈ 600 ms (< 700 ms). */
+@keyframes enter-up { from { opacity: 0; transform: translateY(8px); } }
+@keyframes enter-fade { from { opacity: 0; } }
+.main > *, .grid > *, .games > .game, .modal { --i: 0; }
+.main > *:nth-child(2), .grid > *:nth-child(2), .games > .game:nth-child(2) { --i: 1; }
+.main > *:nth-child(3), .grid > *:nth-child(3), .games > .game:nth-child(3) { --i: 2; }
+.main > *:nth-child(4), .grid > *:nth-child(4), .games > .game:nth-child(4) { --i: 3; }
+.main > *:nth-child(5), .grid > *:nth-child(5), .games > .game:nth-child(5) { --i: 4; }
+.main > *:nth-child(6), .grid > *:nth-child(6), .games > .game:nth-child(6) { --i: 5; }
+.main > *:nth-child(7), .grid > *:nth-child(7), .games > .game:nth-child(7) { --i: 6; }
+.main > *:nth-child(n+8), .grid > *:nth-child(n+8), .games > .game:nth-child(n+8) { --i: 7; }
+.main > * { animation: enter-up var(--dur-medium) var(--ease-out) both; animation-delay: calc(var(--i) * var(--stagger)); }
+/* Conteúdo que chega depois (resultados, listas) entra com o mesmo movimento, mais curto */
+.grid > .card, .games > .game, #out > .card, .list > .card { animation: enter-up var(--dur-short) var(--ease-out) both; animation-delay: calc(var(--i) * var(--stagger)); }
+
+/* Diálogo: fundo em fade, caixa sobe e cresce levemente (entrada ease-out); saída mais rápida (ease-in) */
+@keyframes modal-in { from { opacity: 0; transform: translateY(8px) scale(.97); } }
+@keyframes modal-out { to { opacity: 0; transform: translateY(4px) scale(.98); } }
+.modal-bg { animation: enter-fade var(--dur-short) var(--ease-out); }
+.modal { animation: modal-in var(--dur-medium) var(--ease-out); }
+.modal-bg.closing { animation: enter-fade 160ms var(--ease-in) reverse forwards; }
+.modal-bg.closing .modal { animation: modal-out 160ms var(--ease-in) forwards; }
+
+/* Medidor circular: o arco desliza até o novo valor */
+.gauge-arc { transition: stroke-dashoffset var(--dur-medium) var(--ease-out); }
+
+
+/* =====================================================================
+   Menu lateral animado
+   ===================================================================== */
+@property --fade-t { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --fade-b { syntax: '<length>'; inherits: false; initial-value: 0px; }
+.sidebar { position: relative; scroll-behavior: smooth; overscroll-behavior: contain;
+  transition: --fade-t var(--dur-short) var(--ease-out), --fade-b var(--dur-short) var(--ease-out);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 var(--fade-t), #000 calc(100% - var(--fade-b)), transparent 100%); }
+.sidebar.fade-top { --fade-t: 28px; }
+.sidebar.fade-bottom { --fade-b: 36px; }
+
+/* Títulos dos grupos fixos ao rolar, com fundo desfocado */
+/* Título do grupo rola junto (fixo, deixava um pedaço do item de baixo aparecendo) */
+.nav-title { position: static;
+  background: var(--ui-bg); }
+
+/* Indicador do item ativo: desliza entre posições */
+.nav-indicator { position: absolute; left: var(--space-2); right: var(--space-2); top: 0; height: 36px; border-radius: var(--radius-md); pointer-events: none; z-index: 0; opacity: 0;
+  background: color-mix(in oklab, var(--ui-primary) 11%, transparent);
+  transition: transform var(--dur-medium) var(--ease-in-out), height var(--dur-medium) var(--ease-in-out), opacity var(--dur-short) var(--ease-out); }
+.nav-indicator::before { content: ""; position: absolute; left: 0; top: 22%; bottom: 22%; width: 3px; border-radius: var(--radius-full); background: var(--ui-primary);
+  box-shadow: 0 0 10px color-mix(in oklab, var(--ui-primary) 70%, transparent), 0 0 2px var(--ui-primary); }
+.nav-indicator.no-anim { transition: none; }
+.nav a { position: relative; z-index: 1; }
+.nav a.active { background: transparent; box-shadow: none; }
+
+/* Ícone desliza levemente ao passar o mouse */
+.nav a svg { transition: transform var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); }
+.nav a:hover svg { transform: translateX(2px); color: var(--ui-primary); }
+.nav a.active svg { color: var(--ui-primary); }
+
+/* Entrada do menu ao abrir o app: itens em sequência, de cima para baixo */
+@keyframes nav-in { from { opacity: 0; transform: translateX(-10px); } }
+.nav a { animation: nav-in var(--dur-medium) var(--ease-out) both; animation-delay: calc(min(var(--n, 0), 14) * 25ms); }
+.nav-title { animation: enter-fade var(--dur-medium) var(--ease-out) both; }
+
+/* Ao rolar o menu, os grupos surgem deslizando conforme entram na área visível */
+@supports (animation-timeline: view()) {
+  @keyframes nav-reveal { from { opacity: 0; transform: translateX(-12px) scale(.98); } to { opacity: 1; transform: none; } }
+  .sidebar .nav-group { animation: nav-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
+}
+
+/* =====================================================================
+   Rolagem do conteúdo e detalhes "tech"
+   ===================================================================== */
+/* Barra de progresso da rolagem da página (contínua = linear) */
+.app { timeline-scope: --page; }
+.main { scroll-timeline: --page block; }
+.scroll-progress { position: fixed; top: 38px; left: 236px; right: 0; height: 2px; z-index: 40; pointer-events: none; transform-origin: left; transform: scaleX(0);
+  background: linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 40%, transparent), var(--ui-primary));
+  box-shadow: 0 0 8px color-mix(in oklab, var(--ui-primary) 60%, transparent); }
+@supports (animation-timeline: scroll()) {
+  @keyframes progress-grow { to { transform: scaleX(1); } }
+  .scroll-progress { animation: progress-grow linear both; animation-timeline: --page; }
+}
+
+/* Linhas de listas e tabelas surgem ao entrar na tela durante a rolagem */
+@supports (animation-timeline: view()) {
+  @keyframes row-reveal { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  .main .list > .item, .main .tbl tbody tr { animation: row-reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; }
+}
+
+/* Cartão de destaque: fundo em grade sutil + borda com brilho girando devagar */
+.hero { position: relative; isolation: isolate; overflow: hidden;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--ui-primary) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 5%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px; background-color: var(--ui-bg-elevated); }
+@property --sweep { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes sweep { to { --sweep: 360deg; } }
+.hero::before { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1px; pointer-events: none; z-index: -1;
+  background: conic-gradient(from var(--sweep), transparent 0deg, transparent 280deg, var(--ui-primary) 330deg, transparent 360deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: sweep 6s linear infinite; }
+
+/* Cartões de jogo (clicáveis) levantam ao passar o mouse */
+.game { transition: border-color var(--dur-short) var(--ease-out), background var(--dur-short) var(--ease-out), transform var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out); }
+.game:hover { transform: translateY(-2px); box-shadow: 0 8px 24px color-mix(in oklab, var(--ui-color-neutral-950) 60%, transparent), 0 0 0 1px color-mix(in oklab, var(--ui-primary) 25%, transparent); }
+
+/* Movimento reduzido: desliga animações de rolagem, giros contínuos e deslocamentos */
+@media (prefers-reduced-motion: reduce) {
+  .sidebar .nav-group, .main .list > .item, .main .tbl tbody tr, .nav a, .nav-title, .main > *, .grid > *, .games > .game { animation: none !important; }
+  .hero::before { animation: none; }
+  .scroll-progress { display: none; }
+  .nav-indicator { transition: none; }
+  .game:hover, .nav a:hover svg { transform: none; }
+}
+
+
+/* =====================================================================
+   Abertura do app (2 s)
+   Coreografia: logo desenhado (0–900 ms) → raio acende (700–1100 ms) →
+   nome aparece (900–1300 ms) → barra contínua (0–2000 ms) → saída (300 ms, ease-in)
+   ===================================================================== */
+.splash { position: fixed; inset: 0; z-index: 1000; display: flex; align-items: center; justify-content: center;
+  background-color: var(--ui-bg);
+  background-image:
+    radial-gradient(600px 400px at 50% 45%, color-mix(in oklab, var(--ui-primary) 12%, transparent), transparent 70%),
+    linear-gradient(color-mix(in oklab, var(--ui-primary) 4%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 4%, transparent) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+  -webkit-app-region: drag; }
+/* As animações da abertura só começam quando o JavaScript liga o relógio de 2 s (classe .go) */
+.splash:not(.go) *, .splash:not(.go) *::before { animation-play-state: paused !important; }
+.splash-core { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+.splash-logo { width: 112px; height: 112px; overflow: visible; filter: drop-shadow(0 0 18px color-mix(in oklab, var(--ui-primary) 35%, transparent)); }
+.splash-logo .hex { fill: none; stroke: var(--ui-primary); stroke-width: 7; stroke-linejoin: round; stroke-dasharray: 320; stroke-dashoffset: 320;
+  animation: draw 900ms var(--ease-out) forwards; }
+.splash-logo .hex-inner { fill: var(--ui-color-neutral-950); opacity: 0; animation: enter-fade 400ms var(--ease-out) 300ms forwards; }
+.splash-logo .bolt { fill: var(--ui-primary); opacity: 0; transform-origin: 60px 60px; transform: scale(.6);
+  animation: bolt-in 420ms var(--ease-emphasis) 700ms forwards; }
+.splash-word { font-size: var(--text-2xl); font-weight: 800; letter-spacing: .3em; color: var(--ui-text-highlighted); padding-left: .3em; }
+.splash-word span { display: inline-block; opacity: 0; transform: translateY(8px); animation: word-in 380ms var(--ease-out) forwards; }
+.splash-word .w1 { animation-delay: 900ms; }
+.splash-word .w2 { color: var(--ui-primary); animation-delay: 1000ms; }
+.splash-bar { width: 220px; height: 3px; border-radius: var(--radius-full); background: var(--ui-bg-accented); overflow: hidden; }
+.splash-bar > div { height: 100%; width: 100%; transform-origin: left; transform: scaleX(0); background: var(--ui-primary);
+  box-shadow: 0 0 10px var(--ui-primary); animation: bar-fill 2000ms linear forwards; }
+.splash-status { font-size: 13px; color: var(--ui-text-muted); min-height: 1.2em; transition: opacity var(--dur-short) var(--ease-out); }
+.splash.out { animation: splash-out 320ms var(--ease-in) forwards; pointer-events: none; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+@keyframes bolt-in { to { opacity: 1; transform: scale(1); } }
+@keyframes word-in { to { opacity: 1; transform: none; } }
+@keyframes bar-fill { to { transform: scaleX(1); } }
+@keyframes splash-out { to { opacity: 0; transform: scale(1.04); } }
+
+/* Enquanto a abertura roda, o app fica pronto por baixo, sem animar ainda */
+body.booting .nav a, body.booting .nav-title { animation-play-state: paused; }
+body.booting .main > *, body.booting .grid > * { animation-play-state: paused; }
+
+/* =====================================================================
+   Caixas surgindo com movimento fluido
+   Sobem, crescem levemente e desembaçam; escalonadas a cada 45 ms (máx. 8 passos)
+   ===================================================================== */
+@keyframes enter-up { from { opacity: 0; transform: translateY(16px) scale(.985); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+:root { --stagger: 45ms; }
+.main > * { animation: enter-up 420ms var(--ease-out) both; animation-delay: calc(var(--i) * var(--stagger)); }
+.main > .grid { animation: none; }
+.grid > .card, .grid > *, .games > .game, #out > .card, .list > .card { animation: enter-up 380ms var(--ease-out) both; animation-delay: calc(var(--i) * var(--stagger) + 60ms); }
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo .hex { stroke-dashoffset: 0; animation: none; }
+  .splash-logo .hex-inner, .splash-logo .bolt, .splash-word span { opacity: 1; transform: none; animation: none; }
+  .splash-bar > div { animation-duration: 2000ms !important; }
+  .splash.out { animation: enter-fade 1ms reverse forwards; }
+}
+
+
+/* =====================================================================
+   Fundo animado: escuro, hi-tech e discreto
+   Só transform/opacity (composição na GPU, sem repintura). Movimento lento e
+   contínuo para não disputar atenção com o conteúdo.
+   ===================================================================== */
+.app-bg { position: fixed; inset: 38px 0 0 0; z-index: 0; overflow: hidden; pointer-events: none; background: var(--ui-bg); }
+.app { z-index: 1; }
+.main { background: transparent; }
+/* Menu opaco: translúcido com desfoque obrigaria redesenhar o menu a cada quadro do fundo */
+.sidebar { background: var(--ui-bg); }
+
+/* Grade fina que desliza na diagonal; o período é igual ao tamanho da célula (loop sem emenda) */
+.bg-grid { position: absolute; inset: -48px; will-change: transform;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--ui-primary) 5%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 5%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  /* 48 passos em 60 s: anda 1 px por vez, sem gerar 60 quadros/s */
+  animation: grid-drift 60s steps(48) infinite; }
+/* Esmaecimento das bordas numa camada parada (máscara em camada móvel é cara) */
+.app-bg::after { content: ""; position: absolute; inset: 0;
+  background: radial-gradient(120% 90% at 60% 30%, transparent 0%, color-mix(in oklab, var(--ui-bg) 45%, transparent) 50%, var(--ui-bg) 88%); }
+@keyframes grid-drift { to { transform: translate(48px, 48px); } }
+
+/* Brilhos suaves que flutuam devagar (dão profundidade sem chamar atenção) */
+.bg-glow { position: absolute; border-radius: 50%; will-change: transform; }
+.bg-glow.g1 { width: 760px; height: 760px; left: 38%; top: -260px;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--ui-primary) 9%, transparent), transparent);
+  animation: glow-a 40s steps(200) infinite alternate; }
+.bg-glow.g2 { width: 620px; height: 620px; left: -160px; bottom: -240px;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--ui-color-green-700) 10%, transparent), transparent);
+  animation: glow-b 55s steps(220) infinite alternate; }
+@keyframes glow-a { to { transform: translate(-180px, 140px) scale(1.12); } }
+@keyframes glow-b { to { transform: translate(220px, -120px) scale(.92); } }
+
+/* Linha de varredura muito tênue, de cima para baixo */
+.bg-scan { position: absolute; left: 0; right: 0; top: 0; height: 140px; will-change: transform; opacity: .55;
+  background: linear-gradient(to bottom, transparent, color-mix(in oklab, var(--ui-primary) 4%, transparent) 70%, color-mix(in oklab, var(--ui-primary) 9%, transparent) 99%, transparent);
+  animation: scan 16s steps(240) infinite; }
+@keyframes scan { from { transform: translateY(-160px); } to { transform: translateY(100vh); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-grid, .bg-glow, .bg-scan { animation: none !important; }
+  .bg-scan { display: none; }
+}
+
+
+/* =====================================================================
+   Fundo interativo: luz que segue o mouse, lente na grade, parallax e pulso no clique
+   Posições atualizadas pelo js/bg.js só enquanto o mouse se move (transform = composição na GPU).
+   ===================================================================== */
+.bg-par { position: absolute; inset: 0; will-change: transform; }
+.app-bg::after { z-index: 1; }
+.bg-scan { z-index: 2; }
+
+/* Luz que acompanha o cursor */
+.bg-spot { position: absolute; left: 0; top: 0; width: 560px; height: 560px; border-radius: 50%; z-index: 2; pointer-events: none; opacity: 0;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--ui-primary) 10%, transparent), color-mix(in oklab, var(--ui-primary) 3%, transparent) 55%, transparent);
+  will-change: transform, opacity; transition: opacity 600ms var(--ease-out); }
+.app-bg.pointer-in .bg-spot { opacity: 1; }
+
+/* Lente: as linhas da grade acendem perto do cursor (alinhada à grade por background-position) */
+.bg-lens { position: absolute; left: 0; top: 0; width: 320px; height: 320px; border-radius: 50%; opacity: 0;
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--ui-primary) 26%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 26%, transparent) 1px, transparent 1px);
+  background-size: 48px 48px;
+  -webkit-mask-image: radial-gradient(closest-side, #000 0%, rgba(0,0,0,.5) 45%, transparent 100%);
+  will-change: transform; transition: opacity 600ms var(--ease-out); }
+.app-bg.pointer-in .bg-lens { opacity: 1; }
+
+/* Pulso discreto no clique */
+.bg-pulse { position: absolute; left: 0; top: 0; width: 240px; height: 240px; margin: -120px 0 0 -120px; border-radius: 50%; z-index: 2; pointer-events: none;
+  border: 1px solid color-mix(in oklab, var(--ui-primary) 45%, transparent);
+  box-shadow: 0 0 24px color-mix(in oklab, var(--ui-primary) 20%, transparent) inset;
+  animation: bg-pulse 650ms var(--ease-out) forwards; }
+@keyframes bg-pulse { from { transform: var(--at) scale(.1); opacity: .9; } to { transform: var(--at) scale(1); opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-spot, .bg-lens, .bg-pulse { display: none; }
+  .bg-par { transform: none !important; }
+}
+
+
+/* =====================================================================
+   Painel (dashboard)
+   ===================================================================== */
+.center { text-align: center; } .center-row { justify-content: center; } .mt-1 { margin-top: var(--space-1); }
+.label.center { display: block; color: var(--ui-text-muted); font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; }
+.btn.lg { padding: 11px var(--space-5); font-size: 15px; font-weight: 600; }
+.btn.block { width: 100%; justify-content: center; }
+
+/* Aviso de otimização pendente */
+.pending { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-2) var(--space-4); border-radius: var(--radius-lg); border: 1px solid var(--ui-border-accented); background: var(--ui-bg-elevated); }
+.pending b { display: block; font-size: 13px; text-transform: uppercase; letter-spacing: .06em; }
+.pending span:not(.pend-ic):not(.spin) { font-size: 12px; color: var(--ui-text-muted); }
+.pending .pend-ic { width: 30px; height: 30px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; }
+.pending .pend-ic svg { width: 16px; height: 16px; }
+.pending.warn { border-color: color-mix(in oklab, var(--ui-warning) 40%, transparent); background: color-mix(in oklab, var(--ui-warning) 7%, var(--ui-bg-elevated)); }
+.pending.warn b, .pending.warn .pend-ic { color: var(--ui-warning); } .pending.warn .pend-ic { background: color-mix(in oklab, var(--ui-warning) 15%, transparent); }
+.pending.ok { border-color: color-mix(in oklab, var(--ui-success) 40%, transparent); }
+.pending.ok b, .pending.ok .pend-ic { color: var(--ui-success); } .pending.ok .pend-ic { background: color-mix(in oklab, var(--ui-success) 15%, transparent); }
+
+.dash-top { display: grid; grid-template-columns: minmax(260px, 320px) minmax(300px, 1fr) minmax(300px, 1fr); gap: var(--space-4); align-items: stretch; }
+@media (max-width: 1280px) { .dash-top { grid-template-columns: minmax(260px, 320px) 1fr; } .dash-top .promo { grid-column: 1 / -1; } }
+.dash-col { display: flex; flex-direction: column; gap: var(--space-3); }
+
+/* Caixas de ação rápida */
+.mini { display: grid; grid-template-columns: auto 1fr; gap: var(--space-2) var(--space-3); padding: var(--space-4); flex: 1; align-content: center; }
+.mini-ic { width: 40px; height: 40px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--ui-primary);
+  background: color-mix(in oklab, var(--ui-primary) 12%, transparent); border: 1px solid color-mix(in oklab, var(--ui-primary) 25%, transparent); }
+.mini-ic svg { width: 20px; height: 20px; }
+.mini-body { display: flex; flex-direction: column; min-width: 0; }
+.mini-body .label { color: var(--ui-text-muted); font-size: var(--text-xs); font-weight: 600; text-transform: uppercase; letter-spacing: .06em; }
+.mini-val { font-size: 22px; font-weight: 700; letter-spacing: -.01em; line-height: 1.2; }
+.mini .btn { grid-column: 1 / -1; justify-content: center; }
+
+/* Acelerador */
+.score-card { display: flex; flex-direction: column; justify-content: center; }
+.speedo { position: relative; width: 100%; max-width: 300px; margin: var(--space-2) auto 0; }
+.speedo svg { width: 100%; height: auto; display: block; overflow: visible; }
+.speedo-track { fill: none; stroke: var(--ui-bg-accented); stroke-width: 14; stroke-linecap: round; }
+.speedo-arc { fill: none; stroke: var(--ui-primary); stroke-width: 14; stroke-linecap: round; transition: stroke-dashoffset 700ms var(--ease-out), stroke var(--dur-short) var(--ease-out);
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--ui-primary) 55%, transparent)); }
+.speedo[data-zone="warn"] .speedo-arc { stroke: var(--ui-warning); filter: drop-shadow(0 0 6px color-mix(in oklab, var(--ui-warning) 50%, transparent)); }
+.speedo[data-zone="bad"] .speedo-arc { stroke: var(--ui-error); filter: drop-shadow(0 0 6px color-mix(in oklab, var(--ui-error) 50%, transparent)); }
+.speedo .tick { stroke: var(--ui-border-control); stroke-width: 1.5; } .speedo .tick.big { stroke: var(--ui-text-muted); stroke-width: 2; }
+.speedo .tick-l { fill: var(--ui-text-muted); font-size: 11px; font-weight: 600; text-anchor: middle; font-family: var(--font-sans); }
+.speedo .needle { transform-origin: 130px 132px; transform-box: view-box; transition: transform 700ms var(--ease-out); }
+.speedo .needle line { stroke: var(--ui-text-highlighted); stroke-width: 4; stroke-linecap: round; }
+.speedo .needle circle { fill: var(--ui-bg-elevated); stroke: var(--ui-primary); stroke-width: 3; }
+.speedo-val { position: absolute; left: 0; right: 0; bottom: 6%; text-align: center; }
+.speedo-val b { font-size: 40px; font-weight: 800; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
+.speedo-val span { font-size: 18px; color: var(--ui-text-muted); font-weight: 600; margin-left: 2px; }
+
+/* Cartão "Windows recém-formatado" */
+.promo { position: relative; overflow: hidden; display: flex; flex-direction: column; gap: var(--space-2);
+  background-image: radial-gradient(420px 220px at 75% 0%, color-mix(in oklab, var(--ui-primary) 14%, transparent), transparent 70%); }
+.promo h2 { font-size: var(--text-xl); margin: var(--space-1) 0 0; }
+.promo p { margin: 0; }
+.promo .badge { align-self: flex-start; }
+.promo-art { height: 92px; display: flex; align-items: center; justify-content: center; margin-bottom: var(--space-1);
+  background-image:
+    linear-gradient(90deg, transparent 0 18%, color-mix(in oklab, var(--ui-primary) 35%, transparent) 18% 19%, transparent 19% 81%, color-mix(in oklab, var(--ui-primary) 35%, transparent) 81% 82%, transparent 82%),
+    repeating-linear-gradient(90deg, transparent 0 22px, color-mix(in oklab, var(--ui-primary) 18%, transparent) 22px 23px);
+  background-size: 100% 1px, 100% 1px; background-position: center 40%, center 60%; background-repeat: no-repeat; }
+.chip-core { width: 64px; height: 64px; border-radius: var(--radius-xl); display: flex; align-items: center; justify-content: center; color: var(--ui-primary);
+  background: var(--ui-bg); border: 1px solid color-mix(in oklab, var(--ui-primary) 55%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in oklab, var(--ui-primary) 8%, transparent), 0 0 28px color-mix(in oklab, var(--ui-primary) 35%, transparent); }
+.chip-core svg { width: 30px; height: 30px; }
+.checks { list-style: none; padding: 0; margin: var(--space-1) 0 var(--space-3); display: flex; flex-direction: column; gap: var(--space-1); font-size: 13.5px; }
+.checks li { display: flex; align-items: center; gap: var(--space-2); }
+.checks svg { width: 15px; height: 15px; color: var(--ui-primary); stroke-width: 2.6; flex: none; }
+.promo .btn.block { margin-top: auto; }
+
+/* Monitor */
+.seg { display: inline-flex; padding: 3px; gap: 2px; border-radius: var(--radius-lg); background: var(--ui-bg); border: 1px solid var(--ui-border-accented); }
+.seg button { background: none; border: 0; color: var(--ui-text-muted); padding: 5px var(--space-3); border-radius: var(--radius-md); cursor: pointer; font-weight: 600; font-size: 13px;
+  transition: background var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out); position: relative; overflow: hidden; }
+.seg button:hover { color: var(--ui-text-highlighted); }
+.seg button.active { background: var(--ui-primary); color: var(--ui-text-inverted); }
+.monitor-body { display: grid; grid-template-columns: auto 1fr; gap: var(--space-5); align-items: center; margin-top: var(--space-4); }
+.gauge.ring { width: 108px; height: 108px; }
+.gauge.ring .gv b { font-size: 20px; }
+.chart-wrap { min-width: 0; }
+.chart-x { display: flex; justify-content: space-between; font-size: 11px; color: var(--ui-text-muted); margin-top: var(--space-1); }
+.tile { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-3) var(--space-4); border-radius: var(--radius-lg); background: var(--ui-bg); border: 1px solid var(--ui-border); }
+.tile-ic { width: 34px; height: 34px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; color: var(--ui-primary); background: color-mix(in oklab, var(--ui-primary) 10%, transparent); flex: none; }
+.tile-ic svg { width: 18px; height: 18px; }
+.tile b { display: block; font-size: 16px; font-variant-numeric: tabular-nums; }
+.tile span:not(.tile-ic) { font-size: 12px; color: var(--ui-text-muted); }
+
+/* Ações recomendadas + informações do sistema */
+.dash-bottom { grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); }
+@media (max-width: 1280px) { .dash-bottom { grid-template-columns: 1fr; } }
+.rec .rec-ic { width: 32px; height: 32px; border-radius: var(--radius-md); display: flex; align-items: center; justify-content: center; flex: none; color: var(--ui-primary); background: color-mix(in oklab, var(--ui-primary) 10%, transparent); }
+.rec .rec-ic svg { width: 16px; height: 16px; }
+.rec .badge { flex: none; }
+.sysinfo { display: flex; flex-direction: column; }
+.si-row { display: grid; grid-template-columns: 22px 120px minmax(0, 1fr); gap: var(--space-2); align-items: center; padding: 7px 0; border-bottom: 1px solid var(--ui-border-muted); font-size: 13px; }
+.si-row:last-child { border-bottom: 0; }
+.si-ic { color: var(--ui-primary); display: flex; } .si-ic svg { width: 15px; height: 15px; }
+.si-k { color: var(--ui-text-muted); }
+.si-v { color: var(--ui-text-highlighted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+/* =====================================================================
+   Animações intensas e brilho na borda
+   O giro da borda usa rotate (composição na GPU, sem redesenhar a cada quadro).
+   ===================================================================== */
+
+/* --- Borda luminosa girando nos cartões principais --- */
+.glow-card { position: relative; isolation: isolate; overflow: hidden; border-color: transparent; }
+.glow-card::before { content: ""; position: absolute; left: 50%; top: 50%; width: 220%; aspect-ratio: 1; z-index: -2; pointer-events: none;
+  background: conic-gradient(from 0deg, transparent 0deg, transparent 220deg, color-mix(in oklab, var(--ui-primary) 25%, transparent) 280deg, var(--ui-primary) 340deg, var(--ui-color-green-200) 352deg, transparent 360deg);
+  transform: translate(-50%, -50%) rotate(0deg); animation: border-spin 4.5s linear infinite; will-change: transform; }
+.glow-card::after { content: ""; position: absolute; inset: 1.5px; z-index: -1; border-radius: calc(var(--radius-lg) - 1px); pointer-events: none;
+  background: var(--ui-bg-elevated); }
+.promo.glow-card::after { background:
+  radial-gradient(420px 220px at 75% 0%, color-mix(in oklab, var(--ui-primary) 14%, transparent), transparent 70%), var(--ui-bg-elevated); }
+.glow-card { box-shadow: 0 0 0 1px var(--ui-border), 0 0 32px -8px color-mix(in oklab, var(--ui-primary) 35%, transparent); }
+.score-card::before { animation-duration: 3.5s; }
+.monitor::before { animation-duration: 6s; }
+@keyframes border-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+/* --- Todos os cartões acendem e levantam no hover --- */
+.main .card { transition: transform var(--dur-short) var(--ease-out), box-shadow var(--dur-medium) var(--ease-out), border-color var(--dur-short) var(--ease-out); }
+.main .card:hover { transform: translateY(-3px);
+  border-color: color-mix(in oklab, var(--ui-primary) 55%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--ui-primary) 35%, transparent), 0 10px 40px -10px color-mix(in oklab, var(--ui-primary) 45%, transparent), 0 18px 40px -20px #000; }
+.main .glow-card:hover { box-shadow: 0 0 0 1px color-mix(in oklab, var(--ui-primary) 45%, transparent), 0 0 48px -6px color-mix(in oklab, var(--ui-primary) 55%, transparent); }
+
+/* --- Entrada mais forte: sobe, cresce, desembaça e quica no fim --- */
+@keyframes enter-pop { 0% { opacity: 0; transform: translateY(34px) scale(.92); filter: blur(10px); } 65% { opacity: 1; filter: blur(0); } 100% { opacity: 1; transform: none; filter: none; } }
+.main > *, .grid > *, .dash-col > *, .dash-top > * { animation: enter-pop 640ms var(--ease-emphasis) both; animation-delay: calc(var(--i, 0) * 70ms); }
+.main > .grid, .main > .dash-top { animation: none; }
+.dash-top > *:nth-child(2) { --i: 2; } .dash-top > *:nth-child(3) { --i: 4; }
+.dash-col > *:nth-child(1) { --i: 1; } .dash-col > *:nth-child(2) { --i: 2; } .dash-col > *:nth-child(3) { --i: 3; }
+body.booting .dash-col > *, body.booting .dash-top > * { animation-play-state: paused; }
+
+/* --- Acelerador: arco respirando e marcador brilhante com quique --- */
+.speedo .needle { transition: transform 1100ms var(--ease-emphasis); }
+.speedo .needle line { stroke: var(--ui-text-highlighted); stroke-width: 4; }
+.speedo .needle-dot { fill: var(--ui-text-highlighted); stroke: var(--ui-primary); stroke-width: 3;
+  filter: drop-shadow(0 0 6px var(--ui-primary)) drop-shadow(0 0 14px var(--ui-primary)); }
+.speedo-arc { transition: stroke-dashoffset 1100ms var(--ease-emphasis), stroke var(--dur-short) var(--ease-out); }
+.speedo::before { content: ""; position: absolute; inset: 4% 10% 18%; border-radius: 50%; pointer-events: none; z-index: -1;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--ui-primary) 22%, transparent), transparent 75%); animation: halo 2.4s var(--ease-in-out) infinite; will-change: opacity; }
+@keyframes halo { 0%, 100% { opacity: .35; } 50% { opacity: 1; } }
+.speedo-val { bottom: 20%; }
+.speedo-val b { font-size: 48px; text-shadow: 0 0 24px color-mix(in oklab, var(--ui-primary) 55%, transparent); }
+
+/* --- Botão Boost: reflexo passando + brilho pulsante --- */
+.boost-btn { position: relative; overflow: visible; isolation: isolate; }
+.boost-btn::before { content: ""; position: absolute; inset: -6px; border-radius: calc(var(--radius-md) + 6px); z-index: -1; pointer-events: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ui-primary) 22%, transparent), 0 0 34px color-mix(in oklab, var(--ui-primary) 70%, transparent);
+  animation: halo 2.2s var(--ease-in-out) infinite; will-change: opacity; }
+.boost-btn .shine { position: absolute; inset: 0; overflow: hidden; border-radius: inherit; pointer-events: none; }
+.boost-btn .shine::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent); animation: shine 2.8s var(--ease-in-out) infinite; will-change: transform; }
+@keyframes shine { 0%, 35% { transform: translateX(-130%) skewX(-18deg); } 75%, 100% { transform: translateX(300%) skewX(-18deg); } }
+
+/* --- Ícones das caixas emitem ondas de luz --- */
+.mini-ic, .tile-ic, .rec-ic { position: relative; }
+.mini-ic::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; border: 1px solid var(--ui-primary); opacity: 0; animation: ping 2.6s var(--ease-out) infinite; will-change: transform, opacity; }
+.dash-col > *:nth-child(2) .mini-ic::after { animation-delay: .8s; } .dash-col > *:nth-child(3) .mini-ic::after { animation-delay: 1.6s; }
+@keyframes ping { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(1.7); opacity: 0; } }
+
+/* --- Abas do monitor e indicadores com brilho --- */
+.seg button.active { box-shadow: 0 0 16px color-mix(in oklab, var(--ui-primary) 60%, transparent); }
+.pending { position: relative; isolation: isolate; }
+.pending.warn::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; z-index: -1; pointer-events: none;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--ui-warning) 18%, transparent), 0 0 26px color-mix(in oklab, var(--ui-warning) 40%, transparent); animation: halo 1.8s var(--ease-in-out) infinite; will-change: opacity; }
+.pending.ok { box-shadow: 0 0 22px -6px color-mix(in oklab, var(--ui-success) 55%, transparent); }
+
+/* Estado "tudo em dia" das ações recomendadas */
+.all-good { display: flex; align-items: center; gap: var(--space-3); padding: var(--space-4); border-radius: var(--radius-lg); border: 1px dashed color-mix(in oklab, var(--ui-success) 40%, transparent); background: color-mix(in oklab, var(--ui-success) 6%, transparent); }
+.all-good > div { flex: 1; }
+.all-good-ic { width: 36px; height: 36px; border-radius: var(--radius-full); display: flex; align-items: center; justify-content: center; color: var(--ui-success); background: color-mix(in oklab, var(--ui-success) 15%, transparent); flex: none; }
+.all-good-ic svg { width: 18px; height: 18px; stroke-width: 2.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  .glow-card::before, .speedo::before, .boost-btn::before, .boost-btn .shine::after, .mini-ic::after, .pending.warn::before { animation: none !important; }
+  .main > *, .grid > *, .dash-col > *, .dash-top > * { animation: none !important; }
+  .main .card:hover { transform: none; }
+}
+
+
+/* =====================================================================
+   Economia: com a janela fora de foco (jogando, outra janela, minimizado),
+   todas as animações decorativas pausam. Spinners de tarefas continuam.
+   ===================================================================== */
+body.app-idle *:not(.spin), body.app-idle *:not(.spin)::before, body.app-idle *:not(.spin)::after { animation-play-state: paused !important; }
+
+/* =====================================================================
+   Manutenção
+   ===================================================================== */
+.weekly { padding: var(--space-6); }
+.weekly-ic { width: 44px; height: 44px; border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: var(--ui-primary);
+  background: color-mix(in oklab, var(--ui-primary) 12%, transparent); border: 1px solid color-mix(in oklab, var(--ui-primary) 30%, transparent); }
+.weekly-ic svg { width: 22px; height: 22px; }
+.weekly .checks { font-size: 14.5px; font-weight: 600; color: var(--ui-text-highlighted); }
+.chip-restore { display: inline-flex; align-items: center; gap: var(--space-1); padding: 4px var(--space-2); border-radius: var(--radius-md); font-size: 12px; font-weight: 600;
+  color: var(--ui-info); background: color-mix(in oklab, var(--ui-info) 10%, transparent); }
+.chip-restore svg { width: 13px; height: 13px; }
+.tools .tool { display: flex; flex-direction: column; gap: var(--space-2); }
+.tools .tool h3 { margin: 0; }
+.tools .tool p { margin: 0 0 var(--space-2); flex: 1; }
+pre.cmd { margin: var(--space-1) 0 0; padding: var(--space-3); border-radius: var(--radius-md); background: var(--ui-bg); border: 1px solid var(--ui-border-accented);
+  font: 12.5px/1.5 var(--font-mono); color: var(--ui-primary); white-space: pre-wrap; word-break: break-word; }
+
+/* =====================================================================
+   Hardware Monitor
+   ===================================================================== */
+.hw-card { padding: 0; overflow: hidden; }
+.hw-scroll { max-height: calc(100vh - 290px); overflow: auto; }
+.hw-tbl th { background: var(--ui-bg-elevated); z-index: 1; }
+.hw-tbl .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hw-tbl td { padding: 6px var(--space-4); border-bottom: 1px solid color-mix(in oklab, var(--ui-border) 60%, transparent); }
+.hw-tbl tr.hw-dev td { background: color-mix(in oklab, var(--ui-primary) 7%, var(--ui-bg-elevated)); font-weight: 700; color: var(--ui-text-highlighted); cursor: pointer; padding-top: var(--space-2); padding-bottom: var(--space-2); }
+.hw-tbl tr.hw-grp td { color: var(--ui-text-muted); font-weight: 600; cursor: pointer; padding-left: var(--space-8); }
+.hw-tbl tr.hw-s td:first-child { padding-left: 64px; color: var(--ui-text); }
+.hw-tbl tr.hw-s td.v { color: var(--ui-text-highlighted); font-weight: 600; }
+.hw-tbl tr.hw-s td.mn, .hw-tbl tr.hw-s td.mx { color: var(--ui-text-muted); }
+.hw-tbl tr.hw-s:hover td { background: var(--ui-bg-accented); }
+.hw-tbl .caret { display: inline-flex; width: 14px; margin-right: var(--space-2); color: var(--ui-text-muted); transition: transform var(--dur-short) var(--ease-out); transform: rotate(90deg); vertical-align: -2px; }
+.hw-tbl .caret svg { width: 11px; height: 11px; fill: currentColor; }
+.hw-tbl tr.folded .caret { transform: rotate(0deg); }
+.hw-tbl .hw-ic { display: inline-flex; margin-right: var(--space-2); color: var(--ui-primary); vertical-align: -3px; }
+.hw-tbl .hw-ic svg { width: 16px; height: 16px; }
+.hw-tbl .hw-note { display: inline-flex; margin-left: var(--space-2); color: var(--ui-warning); vertical-align: -2px; cursor: help; }
+.hw-tbl .hw-note svg { width: 13px; height: 13px; }
+.hw-tbl td.v[data-heat="warn"] { color: var(--ui-warning); }
+.hw-tbl td.v[data-heat="bad"] { color: var(--ui-error); }
+/* Valor que mudou pisca de leve em verde */
+.hw-tbl td.v.tick { animation: hw-tick 600ms var(--ease-out); }
+@keyframes hw-tick { from { color: var(--ui-primary); text-shadow: 0 0 10px color-mix(in oklab, var(--ui-primary) 70%, transparent); } }
+/* A tabela não usa a animação de linhas ao rolar (atualiza a cada segundo) */
+.main .hw-tbl tbody tr { animation: none !important; }

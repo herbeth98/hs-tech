@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; worker-src 'self' blob:; connect-src 'self'">
+  <title>HS TECH</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="splash" class="splash" role="status" aria-live="polite" aria-label="Carregando HS TECH">
+    <div class="splash-core">
+      <svg class="splash-logo" viewBox="0 0 120 120" aria-hidden="true">
+        <polygon class="hex" points="60,8 105,34 105,86 60,112 15,86 15,34" />
+        <polygon class="hex-inner" points="60,17 97,38.5 97,81.5 60,103 23,81.5 23,38.5" />
+        <polygon class="bolt" points="68.4,17.8 36.6,65.6 57.2,65.6 48.8,102.2 84.4,50.6 62.8,50.6 74.1,17.8" />
+      </svg>
+      <div class="splash-word"><span class="w1">HS</span> <span class="w2">TECH</span></div>
+      <div class="splash-bar"><div></div></div>
+      <div class="splash-status" id="splashStatus">Iniciando…</div>
+    </div>
+  </div>
+  <div class="app-bg" id="appBg" aria-hidden="true">
+    <div class="bg-par" data-depth="22"><div class="bg-glow g1"></div><div class="bg-glow g2"></div></div>
+    <div class="bg-par" data-depth="9"><div class="bg-grid" id="bgGrid"><div class="bg-lens" id="bgLens"></div></div></div>
+    <div class="bg-spot" id="bgSpot"></div>
+    <div class="bg-scan"></div>
+  </div>
+  <div class="titlebar">
+    <img src="assets/icon.png" alt="">
+    <div class="brand">HS <span>TECH</span></div>
+    <div class="admin hidden" id="adminBadge"></div>
+  </div>
+  <div class="app">
+    <nav class="sidebar" id="sidebar"></nav>
+    <main class="main" id="main"></main>
+    <div class="scroll-progress" aria-hidden="true"></div>
+  </div>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

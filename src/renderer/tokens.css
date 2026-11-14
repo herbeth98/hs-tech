@@ -1,0 +1,115 @@
+/* Tokens do design system (design.nuxt.md). Compartilhado entre o app e o overlay. */
+
+/* Public Sans (variável, pesos 100–900, subconjunto latino com acentos do português). Licença: assets/fonts/OFL-PublicSans.txt */
+@font-face {
+  font-family: 'Public Sans';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('assets/fonts/public-sans-latin-wght.woff2') format('woff2-variations'), url('assets/fonts/public-sans-latin-wght.woff2') format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+:root {
+  color-scheme: dark;
+
+  /* --- Escalas (front matter: theme + neutral = slate, 950 = navy da marca) --- */
+  --ui-color-green-50: #EFFDF5;
+  --ui-color-green-100: #D9FBE8;
+  --ui-color-green-200: #B3F5D1;
+  --ui-color-green-300: #75EDAE;
+  --ui-color-green-400: #00DC82;
+  --ui-color-green-500: #00C16A;
+  --ui-color-green-600: #00A155;
+  --ui-color-green-700: #007F45;
+  --ui-color-green-800: #016538;
+  --ui-color-green-900: #0A5331;
+  --ui-color-green-950: #052E16;
+
+  --ui-color-neutral-50: #f8fafc;
+  --ui-color-neutral-100: #f1f5f9;
+  --ui-color-neutral-200: #e2e8f0;
+  --ui-color-neutral-300: #cbd5e1;
+  --ui-color-neutral-400: #94a3b8;
+  --ui-color-neutral-500: #64748b;
+  --ui-color-neutral-600: #475569;
+  --ui-color-neutral-700: #334155;
+  --ui-color-neutral-800: #1e293b;
+  --ui-color-neutral-900: #0f172a;
+  --ui-color-neutral-950: #020420;
+
+  --ui-color-red-400: #f87171;
+  --ui-color-yellow-400: #facc15;
+  --ui-color-blue-400: #60a5fa;
+  --ui-color-violet-400: #a78bfa;
+  --ui-color-white: #ffffff;
+
+  /* --- Cores semânticas (tema escuro usa os tons -400) --- */
+  --ui-primary: var(--ui-color-green-400);
+  --ui-primary-hover: var(--ui-color-green-500);
+  --ui-success: var(--ui-color-green-400);
+  --ui-info: var(--ui-color-blue-400);
+  --ui-secondary: var(--ui-color-blue-400);
+  --ui-warning: var(--ui-color-yellow-400);
+  --ui-error: var(--ui-color-red-400);
+  --ui-important: var(--ui-color-violet-400);
+
+  /* --- Texto: highlighted > default > toned > muted > dimmed --- */
+  --ui-text-highlighted: var(--ui-color-white);
+  --ui-text: var(--ui-color-neutral-200);
+  --ui-text-toned: var(--ui-color-neutral-300);
+  --ui-text-muted: var(--ui-color-neutral-400);
+  --ui-text-dimmed: var(--ui-color-neutral-500);
+  --ui-text-inverted: var(--ui-color-neutral-900);
+
+  /* --- Fundos --- */
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-bg-muted: var(--ui-color-neutral-900);
+  --ui-bg-elevated: var(--ui-color-neutral-900);
+  --ui-bg-accented: var(--ui-color-neutral-800);
+  --ui-bg-inverted: var(--ui-color-white);
+
+  /* --- Bordas --- */
+  --ui-border: var(--ui-color-neutral-800);
+  --ui-border-muted: var(--ui-color-neutral-800);
+  --ui-border-accented: var(--ui-color-neutral-700);
+  --ui-border-inverted: var(--ui-color-white);
+  /* Borda de campos e chaves: neutral-500 para ter 3:1 (WCAG 1.4.11) contra o fundo */
+  --ui-border-control: var(--ui-color-neutral-500);
+
+  /* --- Raio (base 0.25rem) --- */
+  --ui-radius: 0.25rem;
+  --radius-xs: calc(var(--ui-radius) * 0.5);
+  --radius-sm: var(--ui-radius);
+  --radius-md: calc(var(--ui-radius) * 1.5);
+  --radius-lg: calc(var(--ui-radius) * 2);
+  --radius-xl: calc(var(--ui-radius) * 3);
+  --radius-2xl: calc(var(--ui-radius) * 4);
+  --radius-full: 9999px;
+
+  /* --- Espaçamento (escala de 4px) --- */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px;
+  --space-6: 24px; --space-8: 32px; --space-10: 40px; --space-12: 48px; --space-16: 64px;
+
+  /* --- Layout e tipografia --- */
+  --ui-container: 90rem;
+  --font-sans: 'Public Sans', "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+  --text-xs: 12px; --text-sm: 14px; --text-base: 16px; --text-lg: 18px; --text-xl: 20px; --text-2xl: 24px; --text-4xl: 36px; --text-5xl: 48px;
+
+  /* --- Movimento (princípios de animação) ---
+     micro: estados de botão e chaves · short: hover, fades, toasts · medium: diálogos, troca de página
+     ease-out = elementos que entram · ease-in = elementos que saem · ease-in-out = mudança de posição
+     linear = só para movimento contínuo (spinner, barra de tempo) */
+  --dur-micro: 90ms;
+  --dur-short: 200ms;
+  --dur-medium: 280ms;
+  --dur-long: 450ms;
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-emphasis: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --stagger: 40ms;
+
+  --ui-shadow: 0 10px 30px color-mix(in oklab, var(--ui-color-neutral-950) 70%, transparent);
+  --ui-focus: var(--ui-primary);
+}
