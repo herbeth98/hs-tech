@@ -4,8 +4,8 @@
   "version": "1.0.0",
   "description": "Otimizador, monitor e kit de ferramentas para PCs Windows",
   "main": "src/main/main.js",
-  "author": "HS TECH",
-  "license": "UNLICENSED",
+  "author": "Herbeth Sousa",
+  "license": "MIT",
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win portable nsis"
@@ -17,10 +17,18 @@
   "build": {
     "appId": "com.hstech.optimizer",
     "productName": "HS TECH",
-    "directories": { "output": "dist" },
-    "files": ["src/**/*", "package.json"],
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
     "win": {
-      "target": ["nsis", "portable"],
+      "target": [
+        "nsis",
+        "portable"
+      ],
       "requestedExecutionLevel": "requireAdministrator",
       "icon": "src/renderer/assets/icon.png"
     },
@@ -29,5 +37,10 @@
       "allowToChangeInstallationDirectory": true,
       "shortcutName": "HS TECH"
     }
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/herbeth98/hs-tech.git"
+  },
+  "homepage": "https://github.com/herbeth98/hs-tech"
 }

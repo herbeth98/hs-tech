@@ -22,6 +22,7 @@
   <img src="https://img.shields.io/badge/idioma-portugu%C3%AAs-00DC82?style=flat-square&labelColor=020420" alt="Em português">
   <img src="https://img.shields.io/github/downloads/herbeth98/hs-tech/total?style=flat-square&color=00DC82&labelColor=020420&label=downloads" alt="Downloads">
   <img src="https://img.shields.io/github/v/release/herbeth98/hs-tech?style=flat-square&color=00DC82&labelColor=020420&label=vers%C3%A3o" alt="Versão">
+  <img src="https://img.shields.io/badge/licen%C3%A7a-MIT-00DC82?style=flat-square&labelColor=020420" alt="Licença MIT">
 </p>
 
 <br>
@@ -121,7 +122,7 @@ Marque o que quer e deixe o HS TECH fazer o resto: instala seus programas (Chrom
 - **Tudo pode ser desfeito.** Cada ajuste tem um botão para voltar ao que era.
 - **Ponto de restauração** antes das mudanças grandes, com um clique.
 - **Nada é enviado para fora.** O HS TECH só se conecta à internet quando você pede (teste de velocidade, instalar programas, procurar drivers).
-- **Código aberto.** Está tudo aqui, para quem quiser conferir.
+- **Código aberto (licença MIT).** Está tudo aqui, para quem quiser conferir, estudar ou melhorar.
 - **Sem drivers escondidos.** O app usa só o que o próprio Windows oferece.
 
 <br>
