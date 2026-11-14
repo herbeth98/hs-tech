@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="../../src/renderer/tokens.css">
+<style>
+  html, body { margin: 0; width: 1280px; height: 640px; overflow: hidden; background: var(--ui-bg); font-family: var(--font-sans); color: var(--ui-text-highlighted); }
+  .wrap { position: relative; width: 1280px; height: 640px; overflow: hidden;
+    background:
+      radial-gradient(700px 420px at 78% 40%, color-mix(in oklab, var(--ui-primary) 20%, transparent), transparent 70%),
+      radial-gradient(500px 360px at 8% 100%, color-mix(in oklab, var(--ui-color-green-700) 22%, transparent), transparent 70%),
+      var(--ui-bg); }
+  .grid { position: absolute; inset: 0;
+    background-image: linear-gradient(color-mix(in oklab, var(--ui-primary) 7%, transparent) 1px, transparent 1px),
+      linear-gradient(90deg, color-mix(in oklab, var(--ui-primary) 7%, transparent) 1px, transparent 1px);
+    background-size: 40px 40px;
+    -webkit-mask-image: radial-gradient(90% 90% at 70% 40%, #000 30%, transparent 85%); }
+  .left { position: absolute; left: 80px; top: 0; bottom: 0; width: 560px; display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .brand { display: flex; align-items: center; gap: 18px; }
+  .brand img { width: 76px; height: 76px; filter: drop-shadow(0 0 22px color-mix(in oklab, var(--ui-primary) 60%, transparent)); }
+  .brand .name { font-size: 64px; font-weight: 900; letter-spacing: .08em; line-height: 1; }
+  .brand .name span { color: var(--ui-primary); text-shadow: 0 0 30px color-mix(in oklab, var(--ui-primary) 55%, transparent); }
+  .tag { font-size: 40px; font-weight: 800; line-height: 1.12; letter-spacing: -.01em; }
+  .tag em { font-style: normal; color: var(--ui-primary); }
+  .sub { font-size: 21px; color: var(--ui-text-toned); line-height: 1.45; max-width: 520px; }
+  .pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill { padding: 7px 14px; border-radius: 999px; font-size: 16px; font-weight: 700; border: 1px solid color-mix(in oklab, var(--ui-primary) 45%, transparent); color: var(--ui-primary); background: color-mix(in oklab, var(--ui-primary) 10%, transparent); }
+  .shot { position: absolute; right: -70px; top: 70px; width: 700px; border-radius: 16px; overflow: hidden;
+    transform: perspective(1400px) rotateY(-14deg) rotateX(4deg);
+    box-shadow: 0 0 0 1px color-mix(in oklab, var(--ui-primary) 55%, transparent), 0 0 70px color-mix(in oklab, var(--ui-primary) 40%, transparent), 0 40px 80px #000; }
+  .shot img { display: block; width: 100%; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="grid"></div>
+  <div class="shot"><img src="../../docs/images/painel.png" alt=""></div>
+  <div class="left">
+    <div class="brand"><img src="../../src/renderer/assets/icon.png" alt=""><div class="name">HS <span>TECH</span></div></div>
+    <div class="tag">Seu PC no <em>máximo</em>.<br>Sem complicação.</div>
+    <div class="sub">Otimize, monitore e cuide do Windows em um só lugar. Gratuito e em português.</div>
+    <div class="pills"><span class="pill">+FPS</span><span class="pill">Menos input lag</span><span class="pill">Monitor de hardware</span><span class="pill">Um clique</span></div>
+  </div>
+</div>
+</body>
+</html>

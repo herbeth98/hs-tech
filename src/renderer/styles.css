@@ -694,7 +694,10 @@ body.booting .dash-col > *, body.booting .dash-top > * { animation-play-state: p
    Economia: com a janela fora de foco (jogando, outra janela, minimizado),
    todas as animações decorativas pausam. Spinners de tarefas continuam.
    ===================================================================== */
-body.app-idle *:not(.spin), body.app-idle *:not(.spin)::before, body.app-idle *:not(.spin)::after { animation-play-state: paused !important; }
+/* Só as animações infinitas e decorativas; as de entrada e os spinners continuam (senão o conteúdo ficaria congelado invisível) */
+body.app-idle .glow-card::before, body.app-idle .speedo::before, body.app-idle .boost-btn::before, body.app-idle .boost-btn .shine::after,
+body.app-idle .mini-ic::after, body.app-idle .pending::before, body.app-idle .hero::before,
+body.app-idle .bg-grid, body.app-idle .bg-glow, body.app-idle .bg-scan { animation-play-state: paused !important; }
 
 /* =====================================================================
    Manutenção

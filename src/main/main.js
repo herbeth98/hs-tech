@@ -223,7 +223,7 @@ function handle(channel, fn) {
 
 function registerIpc() {
   // Sistema
-  handle('app:info', async () => ({ admin: isAdmin(), userName: os.userInfo().username, version: app.getVersion(), userData: USER, platform: os.release(), settings }));
+  handle('app:info', async () => ({ admin: isAdmin(), userName: process.env.HSTECH_DEMO ? 'Gamer' : os.userInfo().username, version: app.getVersion(), userData: USER, platform: os.release(), settings }));
   handle('app:relaunchAdmin', async () => {
     const exe = process.execPath;
     const args = app.isPackaged ? [] : [path.join(__dirname, '..', '..')];
@@ -293,7 +293,11 @@ Write-Output ok`);
     return r.filePath;
   });
 
-  handle('sys:info', async (force) => { sysInfo = await system.getInfo(force); return sysInfo; });
+  handle('sys:info', async (force) => {
+    sysInfo = await system.getInfo(force);
+    // Modo de demonstração (capturas públicas): esconde o nome do computador
+    return process.env.HSTECH_DEMO ? { ...sysInfo, host: 'HS-TECH-PC', user: 'Gamer' } : sysInfo;
+  });
   handle('sys:checkup', async () => system.checkup());
   handle('sys:xmp', async () => system.getXmp());
   handle('sys:extra', async () => system.getExtra());

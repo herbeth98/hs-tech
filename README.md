@@ -1,60 +1,206 @@
-# HS TECH
+<p align="center">
+  <img src="docs/images/banner.png" alt="HS TECH: seu PC no máximo, sem complicação" width="100%">
+</p>
 
-Otimizador, monitor e kit de ferramentas para PCs Windows 10/11, feito em Electron. Interface em português, tema escuro no design system Nuxt (navy + verde), sem dependências além do Electron.
+<h1 align="center">Seu PC mais rápido, mais estável e sob controle.</h1>
 
-## Download
+<p align="center">
+  O <b>HS TECH</b> reúne em um só app tudo o que você usaria cinco programas diferentes para fazer:<br>
+  otimizar o Windows, ganhar FPS, ver o que acontece no hardware e resolver problemas.<br>
+  <b>Gratuito, em português e sem anúncios.</b>
+</p>
 
-Baixe a versão pronta na [página de Releases](https://github.com/herbeth98/hs-tech/releases/latest):
+<p align="center">
+  <a href="https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Setup-1.0.0.exe"><img src="https://img.shields.io/badge/Baixar_instalador-v1.0.0-00DC82?style=for-the-badge&logo=windows11&logoColor=white&labelColor=020420" alt="Baixar instalador" height="42"></a>
+  &nbsp;
+  <a href="https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Portatil-1.0.0.exe"><img src="https://img.shields.io/badge/Vers%C3%A3o_port%C3%A1til-sem_instalar-1e293b?style=for-the-badge&logo=usb&logoColor=00DC82&labelColor=020420" alt="Baixar versão portátil" height="42"></a>
+</p>
 
-| Arquivo | Para quem |
-|---|---|
-| [**HS-TECH-Setup-1.0.0.exe**](https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Setup-1.0.0.exe) | Instalador: escolhe a pasta e cria atalhos na Área de Trabalho e no Menu Iniciar |
-| [**HS-TECH-Portatil-1.0.0.exe**](https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Portatil-1.0.0.exe) | Versão portátil: roda direto, sem instalar |
+<p align="center">
+  <img src="https://img.shields.io/badge/Windows-10_%7C_11-00DC82?style=flat-square&labelColor=020420" alt="Windows 10 e 11">
+  <img src="https://img.shields.io/badge/pre%C3%A7o-gratuito-00DC82?style=flat-square&labelColor=020420" alt="Gratuito">
+  <img src="https://img.shields.io/badge/idioma-portugu%C3%AAs-00DC82?style=flat-square&labelColor=020420" alt="Em português">
+  <img src="https://img.shields.io/github/downloads/herbeth98/hs-tech/total?style=flat-square&color=00DC82&labelColor=020420&label=downloads" alt="Downloads">
+  <img src="https://img.shields.io/github/v/release/herbeth98/hs-tech?style=flat-square&color=00DC82&labelColor=020420&label=vers%C3%A3o" alt="Versão">
+</p>
 
-Requer Windows 10 ou 11 (64 bits). Os executáveis não têm assinatura digital: se o SmartScreen avisar "O Windows protegeu o computador", clique em **Mais informações → Executar assim mesmo**.
+<br>
 
-## Como rodar pelo código
+## ⚡ Um clique para deixar tudo no lugar
+
+Abriu o app, viu a nota. O **acelerador de otimização** mostra, de 0 a 100, quanto do seu Windows já está ajustado. Apertou **Dar Boost Agora**, ele cria um ponto de restauração (se você quiser), aplica os ajustes recomendados, limpa o que sobra e libera a memória RAM.
+
+Na mesma tela: monitor em tempo real, limpeza de arquivos e da RAM com um clique, pontos de restauração e as informações do seu PC.
+
+<p align="center"><img src="docs/images/painel.png" alt="Painel do HS TECH com acelerador de otimização, monitor de desempenho e ações rápidas" width="92%"></p>
+
+<br>
+
+## 🎮 Feito para quem joga
+
+<table>
+<tr>
+<td width="62%">
+
+**Mais FPS, menos input lag, menos travadinha.** Cada ajuste mostra se está ligado no seu Windows e pode ser desfeito a qualquer momento.
+
+- **Plano de energia HS TECH**: CPU sempre no máximo, sem estacionamento de núcleos
+- **Input lag**: prioridade para o jogo, timer de alta resolução, USB sem economia de energia
+- **Estabilidade de FPS**: sem Power Throttling, sem gravação em segundo plano
+- **Por jogo**: liberar o núcleo 0, usar só núcleos físicos, prioridade alta e GPU dedicada
+- **Placa de vídeo NVIDIA**: modo de desempenho máximo, baixa latência e limite de FPS direto no driver
+
+</td>
+<td width="38%" align="center">
+
+<img src="docs/images/overlay.png" alt="Overlay de FPS do HS TECH" width="260"><br>
+<sub><b>Overlay por cima do jogo</b><br>FPS, 1% e 0,1% low, frame time, CPU, GPU, RAM e ping, ao vivo.</sub>
+
+</td>
+</tr>
+</table>
+
+<p align="center"><img src="docs/images/otimizacao.png" alt="Ajustes de otimização para jogos" width="92%"></p>
+
+<br>
+
+## 📊 Veja tudo o que acontece dentro do PC
+
+O **Hardware Monitor** mostra cada núcleo da CPU, a placa de vídeo, a memória, os discos (com temperatura) e a rede, com o valor atual, o mínimo e o máximo. Precisa analisar depois? Grave tudo em CSV e abra no Excel.
+
+<p align="center"><img src="docs/images/hardware-monitor.png" alt="Hardware Monitor com sensores de CPU, GPU, discos e rede" width="92%"></p>
+
+<br>
+
+## 🕹️ Seus jogos, reconhecidos sozinhos
+
+Steam, Epic, GOG, Ubisoft, EA, Riot, Battle.net e Xbox. O HS TECH encontra os jogos instalados e deixa você ajustar cada um: núcleos do processador, prioridade, placa de vídeo, tela cheia e até criar um atalho já otimizado.
+
+<p align="center"><img src="docs/images/jogos.png" alt="Página de jogos com ajustes por jogo" width="92%"></p>
+
+<br>
+
+## 🛠️ Quando algo dá errado, ele explica
+
+**Seu PC desligou sozinho?** O **Diagnóstico** lê os registros do Windows e diz o motivo provável (corte de energia, tela azul, erro de hardware, driver de vídeo) e o que fazer, em ordem.
+
+**O Windows está estranho?** A **Manutenção** tem a revisão semanal (disco, arquivos do sistema e imagem do Windows) e ferramentas para internet, Windows Update, impressora e áudio. O comando exato aparece antes de rodar.
+
+<table>
+<tr>
+<td width="50%"><img src="docs/images/diagnostico.png" alt="Diagnóstico de desligamentos e erros"></td>
+<td width="50%"><img src="docs/images/manutencao.png" alt="Manutenção com revisão semanal"></td>
+</tr>
+</table>
+
+<br>
+
+## ✨ Acabou de formatar?
+
+Marque o que quer e deixe o HS TECH fazer o resto: instala seus programas (Chrome, Steam, Discord, 7-Zip, VLC…), remove os apps desnecessários, desliga a telemetria, o Copilot e o Recall, e aplica o boost de desempenho. Tudo em uma tela.
+
+<p align="center"><img src="docs/images/windows-novo.png" alt="Assistente de Windows recém-formatado" width="92%"></p>
+
+<br>
+
+## 🧰 E tem mais
+
+| | | |
+|:---|:---|:---|
+| 🏆 **Benchmark** com pontuação e nível do seu PC | 🧹 **Limpeza** de temporários, caches e logs | 🚀 **Inicialização** mais leve |
+| 🩺 **Check-up** com nota de 0 a 100 | 🗑️ **Debloat** dos apps que vêm com o Windows | 📦 **Programas**: instalar e atualizar tudo com um clique |
+| 🔥 **Overclock seguro** com teste de estabilidade | 🧩 **Drivers**: erros, atualizações e backup | 🌐 **Rede**: velocidade, ping e perda de pacotes |
+| 🖱️ **Testes** de mouse, monitor e teclado | 🧠 **XMP/EXPO**: confere se a RAM está na velocidade certa | 🛡️ **Privacidade**: telemetria, anúncios e IA da Microsoft |
+
+<p align="center"><img src="docs/images/benchmark.png" alt="Benchmark com pontuação" width="92%"></p>
+
+<br>
+
+## 🔒 Seguro por padrão
+
+- **Tudo pode ser desfeito.** Cada ajuste tem um botão para voltar ao que era.
+- **Ponto de restauração** antes das mudanças grandes, com um clique.
+- **Nada é enviado para fora.** O HS TECH só se conecta à internet quando você pede (teste de velocidade, instalar programas, procurar drivers).
+- **Código aberto.** Está tudo aqui, para quem quiser conferir.
+- **Sem drivers escondidos.** O app usa só o que o próprio Windows oferece.
+
+<br>
+
+## ❓ Perguntas frequentes
+
+<details>
+<summary><b>É gratuito mesmo?</b></summary>
+<br>
+Sim. Sem versão paga, sem anúncios e sem cadastro.
+</details>
+
+<details>
+<summary><b>O Windows mostrou "O Windows protegeu o computador". É seguro?</b></summary>
+<br>
+Esse aviso aparece em programas sem assinatura digital paga. Clique em <b>Mais informações → Executar assim mesmo</b>. O código completo está neste repositório.
+</details>
+
+<details>
+<summary><b>Por que ele pede para rodar como administrador?</b></summary>
+<br>
+Ajustes do Windows, limpeza de pastas do sistema, reparos e a leitura de FPS só funcionam com permissão de administrador.
+</details>
+
+<details>
+<summary><b>Instalador ou versão portátil?</b></summary>
+<br>
+O <b>instalador</b> cria atalhos e fica no seu PC. A <b>versão portátil</b> roda direto, sem instalar, e pode ir num pendrive.
+</details>
+
+<details>
+<summary><b>Funciona com placa de vídeo AMD ou Intel?</b></summary>
+<br>
+Sim. Quase tudo funciona com qualquer placa. Só o perfil do driver, os limites de potência e alguns sensores da GPU são exclusivos da NVIDIA.
+</details>
+
+<details>
+<summary><b>Por que não aparece a temperatura do processador?</b></summary>
+<br>
+O Windows não libera esse sensor sem instalar um driver de baixo nível, e o HS TECH prefere não instalar nenhum. A temperatura da placa de vídeo e dos discos aparece normalmente.
+</details>
+
+<details>
+<summary><b>O overlay de FPS funciona em tela cheia?</b></summary>
+<br>
+Funciona em janela sem bordas e na maioria dos jogos atuais. Em jogos em tela cheia exclusiva, use o modo janela sem bordas.
+</details>
+
+<br>
+
+<p align="center">
+  <a href="https://github.com/herbeth98/hs-tech/releases/latest"><img src="https://img.shields.io/badge/Baixar_o_HS_TECH-gr%C3%A1tis-00DC82?style=for-the-badge&logo=windows11&logoColor=white&labelColor=020420" alt="Baixar o HS TECH" height="42"></a>
+</p>
+
+<br>
+
+---
+
+<details>
+<summary><b>👩‍💻 Para desenvolvedores</b></summary>
+
+### Rodar pelo código
 
 ```bash
 npm install
 npm start
 ```
 
-Rode o terminal como administrador. Sem admin, o app mostra um aviso na barra de título e oferece reabrir como administrador.
+Rode o terminal como administrador.
 
-## Como gerar o instalador
+### Gerar o instalador e a versão portátil
 
 ```bash
 npm run dist
 ```
 
-Gera em `dist/` o instalador (NSIS) e a versão portátil. O `.exe` já pede permissão de administrador ao abrir.
+Os arquivos saem em `dist/`.
 
-## Funções
-
-| Página | O que faz |
-|---|---|
-| Painel | Acelerador de otimização (0–100) com Boost, monitor em tempo real (CPU/GPU/RAM/disco/rede, 60 s), pontos de restauração, limpeza de arquivos e da memória RAM, ações recomendadas e informações do sistema (com Secure Boot e TPM) |
-| Hardware Monitor | Árvore de sensores (CPU por núcleo, GPU NVIDIA, RAM, discos com temperatura, rede) com valor, mínimo e máximo, e gravação em CSV |
-| Check-up | ~20 verificações com nota de 0 a 100 e botão para resolver cada item |
-| Benchmark | CPU (1 núcleo e todos), RAM, GPU (WebGL2 1080p) e disco; pontuação (1000 = PC gamer intermediário), níveis e histórico |
-| Otimização | Ajustes com estado atual e desfazer: Desempenho (plano de energia HS TECH), Jogos, Input Lag, Estabilidade de FPS, Privacidade, IA da Microsoft (Copilot, Recall), Segurança (Defender) |
-| Limpeza | Temporários, Windows Update, despejos, miniaturas, shaders, navegadores, logs, Lixeira |
-| Jogos | Detecta jogos (Steam, Epic, GOG, Ubisoft, EA, Riot, Battle.net, Xbox); por jogo: afinidade (sem núcleo 0, sem SMT, só P-cores), prioridade, GPU dedicada, tela cheia, pasta do executável, atalho otimizado |
-| Placa de Vídeo | nvidia-smi (clock, temperatura, potência, link PCIe), perfil do driver NVIDIA via NVAPI, limites de potência e de clock |
-| Overclock Seguro | Diagnóstico por CPU, XMP/EXPO, GPU e teste de estabilidade com verificação de erros |
-| Programas | Instalar (winget, kits prontos), atualizar tudo com um clique, desinstalar |
-| Inicialização | Liga/desliga programas que abrem com o Windows |
-| Debloat | Remove apps pré-instalados (essenciais ficam protegidos) |
-| Diagnóstico | Explica desligamentos inesperados, telas azuis, erros de hardware (WHEA), travamentos do driver de vídeo e de disco |
-| Drivers | Lista, dispositivos com erro, atualizações pelo Windows Update e backup |
-| Windows Novo | Assistente pós-formatação: ponto de restauração, programas, debloat, privacidade, IA, boost, limpeza |
-| Manutenção | Revisão semanal (CHKDSK + DISM + SFC) e ferramentas: DNS, IP, rede, Windows Update, impressora, áudio, cache de ícones, Store, relógio — mostra o comando antes de rodar |
-| Monitor e Overlay | Gráficos ao vivo e overlay por cima do jogo com FPS, 1% low, frame time, CPU, GPU, VRAM, RAM, ping e perda (Ctrl+Shift+F10) |
-| Rede | Teste de velocidade (Cloudflare), ping, jitter e perda de pacotes |
-| Testes | Mouse (polling rate, cliques), monitor (Hz real, cores, ghosting), teclado, XMP |
-
-## Estrutura
+### Estrutura
 
 ```
 src/
@@ -66,22 +212,16 @@ src/
     tokens.css     tokens do design system (cores, raio, espaçamento, movimento)
     styles.css     componentes e animações
     js/pages/      uma página por arquivo
-tools/             make-icon.js (gera o ícone) e fps-test.html (animação para testar o overlay)
-design-plans/      planos de melhoria de interface
+tools/             ícone, banner do README e animação de teste do overlay
+docs/images/       imagens deste README
 ```
 
-## Observações técnicas
+### Notas técnicas
 
-- O FPS usa o [PresentMon](https://github.com/GameTechDev/PresentMon) da Intel, baixado pelo próprio app (página Monitor).
-- A temperatura da CPU não é lida: o Windows não a expõe sem um driver de kernel (PawnIO/WinRing0), que o app não instala.
-- A afinidade de núcleos é aplicada quando o jogo abre (app aberto ou na bandeja) ou por atalho otimizado.
-- Animações decorativas pausam quando a janela não está em foco; respeita "reduzir movimento" do Windows.
-- Dados do app: `%APPDATA%\HS TECH`.
+- FPS via [PresentMon](https://github.com/GameTechDev/PresentMon) da Intel, baixado pelo próprio app.
+- Animações decorativas pausam com a janela fora de foco; respeita "reduzir movimento" do Windows.
+- Dados do app em `%APPDATA%\HS TECH`.
+- Autoteste: `HSTECH_SELFTEST=<pasta> npx electron .` (com `HSTECH_DEMO=1`, esconde nome de usuário e do computador nas capturas).
+- Banner: `npx electron tools/banner/render.js`.
 
-## Autoteste
-
-```bash
-HSTECH_SELFTEST=<pasta> npx electron .
-```
-
-Abre cada página fora da tela, salva capturas e o console. Variáveis extras: `HSTECH_PAGES`, `HSTECH_WAIT`, `HSTECH_H`, `HSTECH_OVERLAY`, `HSTECH_FBTEST`, `HSTECH_NAVTEST`, `HSTECH_SPLASH`, `HSTECH_MOUSETEST`, `HSTECH_BENCH`.
+</details>
