@@ -2,7 +2,18 @@
 
 Otimizador, monitor e kit de ferramentas para PCs Windows 10/11, feito em Electron. Interface em português, tema escuro no design system Nuxt (navy + verde), sem dependências além do Electron.
 
-## Como rodar
+## Download
+
+Baixe a versão pronta na [página de Releases](https://github.com/herbeth98/hs-tech/releases/latest):
+
+| Arquivo | Para quem |
+|---|---|
+| [**HS-TECH-Setup-1.0.0.exe**](https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Setup-1.0.0.exe) | Instalador: escolhe a pasta e cria atalhos na Área de Trabalho e no Menu Iniciar |
+| [**HS-TECH-Portatil-1.0.0.exe**](https://github.com/herbeth98/hs-tech/releases/download/v1.0.0/HS-TECH-Portatil-1.0.0.exe) | Versão portátil: roda direto, sem instalar |
+
+Requer Windows 10 ou 11 (64 bits). Os executáveis não têm assinatura digital: se o SmartScreen avisar "O Windows protegeu o computador", clique em **Mais informações → Executar assim mesmo**.
+
+## Como rodar pelo código
 
 ```bash
 npm install
