@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="84" viewBox="0 0 420 84"><style>
+    text { font-family: 'Segoe UI Variable Display','Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif; }
+    .a { transform-box: fill-box; transform-origin: center; }
+    @keyframes deriva1 { 50% { transform: translate(60px, -30px) scale(1.12); } }
+    @keyframes deriva2 { 50% { transform: translate(-70px, 40px) scale(.92); } }
+    @keyframes deriva3 { 50% { transform: translate(40px, 50px) scale(1.08); } }
+    .b1 { animation: deriva1 18s ease-in-out infinite; }
+    .b2 { animation: deriva2 22s ease-in-out infinite; }
+    .b3 { animation: deriva3 26s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) { * { animation: none !important; }  }</style><defs><linearGradient id="bt" x1="0" x2="1"><stop offset="0" stop-color="#2ef0a0"/><stop offset="1" stop-color="#00DC82"/></linearGradient></defs><rect width="420" height="84" rx="42.0" fill="url(#bt)"/><rect x="1" y="1" width="418" height="82" rx="41.0" fill="none" stroke="#fff" stroke-opacity=".35"/><g transform="translate(46 42)" fill="none" stroke="#04131c" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M0 -15 V9 M-10 -1 L0 9 L10 -1 M-14 17 H14"/></g><text x="84" y="40" font-size="25" font-weight="700" fill="#04131c">Baixar para Windows</text><text x="84" y="64" font-size="16" fill="#04131c" fill-opacity=".75">Windows 10 e 11 · 64 bits · grátis</text></svg>
