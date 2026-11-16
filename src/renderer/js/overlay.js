@@ -56,6 +56,10 @@
       if (sh.low01) side.push(`0,1% <b>${has ? r0(f.low01) : '—'}</b>`);
       out.push(`<div class="fps">${sh.fps ? `<span class="lbl">FPS</span><span class="num">${has ? r0(f.fps) : '—'}</span>` : ''}<span class="side up">${side.join('<br>')}</span></div>`);
     }
+    if (!has && (sh.fps || sh.low1 || sh.low01)) {
+      const msg = f.error || (f.running ? 'Aguardando um jogo…' : 'Iniciando a contagem de FPS…');
+      out.push(`<div class="fps-msg${f.error ? ' err' : ''}">${esc(msg)}</div>`);
+    }
     if (sh.graph && has && f.graph && f.graph.length > 2) out.push('<div id="g"></div>');
     if (sh.frametime) out.push(`<div class="ft up"><span>Frame time</span><b>${has ? r1(f.frametime) + ' ms' : '—'}</b></div>`);
 

@@ -156,6 +156,7 @@ function setOverlay(visible) {
     ensureMonitor();
     ensurePing();
     if (monitor.presentMonPath(BIN)) monitor.startPresentMon();
+    else monitor.downloadPresentMon(BIN).then(() => monitor.startPresentMon()).catch(() => {}); // primeira vez: baixa sozinho
   } else if (overlay && !overlay.isDestroyed()) {
     overlay.close();
     overlay = null;

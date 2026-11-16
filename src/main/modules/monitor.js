@@ -110,16 +110,45 @@ async function downloadPresentMon(binDir, onProgress = () => {}) {
   return { path: dest, version: rel.tag_name, size: got };
 }
 
+// Quem costuma impedir o Windows de abrir a sessão ETW usada pelo PresentMon
+const BLOQUEADORES = [
+  ['FACEIT', 'o anti-cheat do FACEIT'],
+  ['vgk', 'o anti-cheat Vanguard (Riot)'],
+  ['EasyAntiCheat_EOS', 'o Easy Anti-Cheat'],
+  ['BEDaisy', 'o BattlEye']
+];
+let bloqCache = { t: 0, v: null };
+function quemBloqueia() {
+  if (Date.now() - bloqCache.t < 60000) return bloqCache.v;
+  bloqCache = { t: Date.now(), v: achaBloqueador() };
+  return bloqCache.v;
+}
+function achaBloqueador() {
+  const { spawnSync } = require('child_process');
+  for (const [svc, nome] of BLOQUEADORES) {
+    try {
+      const r = spawnSync('sc', ['query', svc], { windowsHide: true, timeout: 3000, encoding: 'latin1' });
+      if (/\b4\s+RUNNING|\b4\s+EM EXECU/i.test(r.stdout || '')) return nome;
+    } catch {}
+  }
+  return null;
+}
+
+let wantFps = false;   // alguém (overlay ou página Monitor) quer FPS: tenta de novo sozinho se cair
+let lastTry = 0;
+
 function startPresentMon() {
+  wantFps = true;
   if (pmProc || !pmExe || !fs.existsSync(pmExe)) return false;
-  pmError = null;
-  pmColumns = null;
+  lastTry = Date.now();
+  pmColumns = null; // o erro anterior fica até o PresentMon realmente começar (evita piscar a cada nova tentativa)
   pmProc = spawn(pmExe, ['--output_stdout', '--stop_existing_session', '--session_name', 'HSTECH_PM'], { windowsHide: true });
   const sp = lineSplitter((line) => {
     const cells = line.split(',');
     if (!pmColumns) {
       if (/Application/i.test(line) && cells.length > 5) {
         const idx = (names) => { for (const n of names) { const i = cells.findIndex((c) => c.trim().toLowerCase() === n.toLowerCase()); if (i >= 0) return i; } return -1; };
+        pmError = null;
         pmColumns = {
           app: idx(['Application']),
           pid: idx(['ProcessID']),
@@ -140,12 +169,29 @@ function startPresentMon() {
     arr.push({ t: Date.now(), ms, lat: lat > 0 ? lat : null });
   });
   pmProc.stdout.on('data', (d) => sp.push(decode(d)));
-  pmProc.stderr.on('data', (d) => { const t = decode(d).trim(); if (t) pmError = t.slice(0, 300); });
-  pmProc.on('close', (code) => { pmProc = null; if (code && !pmError) pmError = `PresentMon terminou (código ${code})`; });
+  let errTxt = '';
+  pmProc.stderr.on('data', (d) => { errTxt += decode(d); });
+  pmProc.on('close', (code) => {
+    pmProc = null;
+    if (/access denied|acesso negado/i.test(errTxt)) {
+      const quem = quemBloqueia();
+      pmError = quem
+        ? `FPS bloqueado: ${quem} está ativo e impede a contagem. Feche-o e reinicie o PC.`
+        : 'FPS bloqueado: o Windows negou a leitura. Um anti-cheat ou antivírus pode estar impedindo.';
+    } else if (code) {
+      pmError = (errTxt.trim().split(/\r?\n/)[0] || `PresentMon terminou (código ${code})`).slice(0, 200);
+    }
+  });
   return true;
 }
 
+// Chamado a cada segundo: se o PresentMon caiu e ainda queremos FPS, tenta de novo a cada 15 s
+function keepPresentMon() {
+  if (wantFps && !pmProc && pmExe && Date.now() - lastTry > 15000) startPresentMon();
+}
+
 function stopPresentMon() {
+  wantFps = false;
   if (pmProc) {
     try { pmProc.kill(); } catch {}
     pmProc = null;
@@ -198,7 +244,7 @@ function sample(extra) {
     gpu: latest.gpu || null,
     net: latest.net || null,
     disk: latest.disk || null,
-    fps: pmProc || frames.size ? fpsStats() : { running: false, error: pmError },
+    fps: (keepPresentMon(), pmProc || frames.size ? fpsStats() : { running: false, error: pmError }),
     ...extra()
   };
 }
