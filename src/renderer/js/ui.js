@@ -285,3 +285,6 @@ export function icon(name, extra = '') {
 }
 
 export function navigate(page) { location.hash = '#' + page; }
+
+// Faixas de temperatura (°C) usadas nas telas: 'bad' >= 85, 'warn' >= 70. overlay.js tem uma cópia (não importa ui.js).
+export const tempLevel = (t) => (t == null || Number.isNaN(t) ? '' : t >= 85 ? 'bad' : t >= 70 ? 'warn' : 'ok');

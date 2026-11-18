@@ -16,6 +16,7 @@
   const r1 = (n) => (n == null || Number.isNaN(n) ? '—' : n.toFixed(1));
   const gb = (b) => (b / 1073741824).toFixed(1);
   const esc = (s) => String(s || '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // Mesmas faixas de tempLevel() em ui.js: mude as duas juntas.
   const tempCls = (t) => (t >= 85 ? 'c-bad' : t >= 70 ? 'c-warn' : 'c-ok');
   const pct = (v) => Math.max(0, Math.min(100, v || 0));
 

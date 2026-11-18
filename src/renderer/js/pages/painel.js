@@ -240,7 +240,7 @@ async function loadRestore(el) {
 async function loadClean(el) {
   $('#clSub', el).textContent = 'Calculando…';
   const cats = await api.call('clean:scan').catch(() => null);
-  if (!cats || !el.isConnected) return;
+  if (!cats || !$('#clVal', el)) return; // a página pode ter sido trocada durante a varredura
   const total = cats.filter((c) => c.checked).reduce((a, c) => a + c.bytes, 0);
   $('#clVal', el).textContent = fmtBytes(total);
   $('#clSub', el).textContent = 'Temporários, cache de atualizações e logs';

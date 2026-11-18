@@ -41,6 +41,7 @@ let meta = null;
 
 const num = (v) => { const n = parseFloat(String(v).replace(/[^\d.\-]/g, '')); return Number.isFinite(n) ? n : null; };
 
+// Obs.: monitor.js, hwmon.js e gpu.js leem o nvidia-smi cada um por conta própria (campos e intervalos diferentes). Correção de leitura da GPU: confira os três.
 function startSmi() {
   smi = spawn('nvidia-smi', [`--query-gpu=${GPU_FIELDS.join(',')}`, '--format=csv,noheader,nounits', '-lms', '1000'], { windowsHide: true });
   const buf = [];

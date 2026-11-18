@@ -43,6 +43,10 @@ export async function render(el) {
   $('#pos', el).value = o.position; $('#scale', el).value = o.scale; $('#opacity', el).value = o.opacity; $('#hotkey', el).value = o.hotkey; $('#host', el).value = settings.pingHost;
   $('#scv', el).textContent = `${Math.round(o.scale * 100)}%`; $('#opv', el).textContent = `${Math.round(o.opacity * 100)}%`;
   el.querySelectorAll('#metrics input').forEach((i) => { i.checked = !!o.show[i.dataset.k]; });
+  // Itens do overlay vivem em 3 lugares (DEFAULT_SETTINGS.overlay.show no main.js, METRICS aqui e overlay.js): avisa se divergirem.
+  const keys = METRICS.map(([k]) => k);
+  const diff = [...keys.filter((k) => !(k in o.show)), ...Object.keys(o.show).filter((k) => !keys.includes(k))];
+  if (diff.length) console.warn(`[overlay] itens fora de sincronia entre main.js e METRICS: ${diff.join(', ')}`);
   const save = (patch) => call('app:settings', patch);
   $('#pos', el).addEventListener('change', (e) => save({ overlay: { position: e.target.value } }));
   $('#scale', el).addEventListener('input', (e) => { $('#scv', el).textContent = `${Math.round(e.target.value * 100)}%`; save({ overlay: { scale: Number(e.target.value) } }); });

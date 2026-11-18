@@ -32,6 +32,7 @@ function cpuUsage() {
   return pct;
 }
 
+// Obs.: monitor.js, hwmon.js e gpu.js leem o nvidia-smi cada um por conta própria (campos e intervalos diferentes). Correção de leitura da GPU: confira os três.
 function startNvidiaSmi() {
   if (smiProc) return;
   smiProc = spawn('nvidia-smi', ['--query-gpu=utilization.gpu,temperature.gpu,clocks.gr,memory.used,memory.total,power.draw,fan.speed', '--format=csv,noheader,nounits', '-lms', '1000'], { windowsHide: true });

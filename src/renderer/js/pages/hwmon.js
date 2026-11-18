@@ -1,4 +1,4 @@
-import { api, call, esc, icon, toast, $ } from '../ui.js';
+import { api, call, esc, icon, toast, tempLevel, $ } from '../ui.js';
 
 let off = [];
 let mm = new Map();          // chave -> { min, max }
@@ -100,7 +100,7 @@ function updateCells(body, devices) {
     if (v.textContent !== txt) { v.textContent = txt; v.classList.remove('tick'); void v.offsetWidth; v.classList.add('tick'); }
     if (m) { tr.querySelector('.mn').textContent = fmtV(m.min, u); tr.querySelector('.mx').textContent = fmtV(m.max, u); }
     // Temperaturas altas em destaque
-    if (u === '°C') v.dataset.heat = x.value >= 85 ? 'bad' : x.value >= 70 ? 'warn' : '';
+    if (u === '°C') v.dataset.heat = tempLevel(x.value) === 'ok' ? '' : tempLevel(x.value);
   });
 }
 

@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const { runExe, psJson } = require('../ps');
 
+// Obs.: monitor.js, hwmon.js e gpu.js leem o nvidia-smi cada um por conta própria (campos e intervalos diferentes). Correção de leitura da GPU: confira os três.
 const SMI = 'nvidia-smi';
 const FIELDS = [
   'name', 'driver_version', 'vbios_version', 'temperature.gpu', 'utilization.gpu', 'fan.speed', 'pstate',
