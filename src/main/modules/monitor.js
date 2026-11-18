@@ -1,4 +1,4 @@
-// Monitor de desempenho: CPU, RAM, GPU, rede e FPS (via PresentMon da Intel).
+// Monitor de desempenho: CPU, RAM, GPU, rede e FPS (PresentMon da Intel; RTSS como plano B quando um anti-cheat bloqueia).
 const os = require('os');
 const fs = require('fs');
 const path = require('path');
@@ -81,7 +81,7 @@ const frames = new Map(); // app -> [{t, ms}]
 let pmColumns = null;
 let pmError = null;
 let pmExe = null;
-const IGNORE = /^(dwm|explorer|hs tech|electron|presentmon.*|searchhost|startmenuexperiencehost|shellexperiencehost|textinputhost|applicationframehost|nvidia overlay|nvidia share|steamwebhelper|msedgewebview2|chrome|msedge|firefox|brave|discord|code|systemsettings)\.exe$/i;
+const IGNORE = /^(dwm|explorer|hs tech|electron|presentmon.*|searchhost|startmenuexperiencehost|shellexperiencehost|textinputhost|applicationframehost|nvidia overlay|nvidia share|steamwebhelper|msedgewebview2|chrome|msedge|firefox|brave|discord|code|systemsettings|claude|slack|teams|ms-teams|spotify|obs64|whatsapp|telegram)\.exe$/i;
 
 function presentMonPath(binDir) {
   pmExe = path.join(binDir, 'PresentMon.exe');
@@ -142,6 +142,7 @@ function startPresentMon() {
   wantFps = true;
   if (pmProc || !pmExe || !fs.existsSync(pmExe)) return false;
   lastTry = Date.now();
+  if (!pmStartedAt) pmStartedAt = Date.now();
   pmColumns = null; // o erro anterior fica até o PresentMon realmente começar (evita piscar a cada nova tentativa)
   pmProc = spawn(pmExe, ['--output_stdout', '--stop_existing_session', '--session_name', 'HSTECH_PM'], { windowsHide: true });
   const sp = lineSplitter((line) => {
@@ -168,6 +169,7 @@ function startPresentMon() {
     let arr = frames.get(app);
     if (!arr) { arr = []; frames.set(app, arr); }
     arr.push({ t: Date.now(), ms, lat: lat > 0 ? lat : null });
+    pmSawFrame = true;
   });
   pmProc.stdout.on('data', (d) => sp.push(decode(d)));
   let errTxt = '';
@@ -200,6 +202,8 @@ function stopPresentMon() {
     try { require('child_process').spawnSync('logman', ['stop', 'HSTECH_PM', '-ets'], { windowsHide: true, timeout: 5000 }); } catch {}
   }
   frames.clear();
+  stopRtss();
+  pmStartedAt = 0; pmSawFrame = false;
 }
 
 function fpsStats() {
@@ -231,6 +235,109 @@ function fpsStats() {
   };
 }
 
+// ---------------- FPS (RTSS) ----------------
+// Plano B quando um anti-cheat (FACEIT etc.) esconde os eventos de quadro do PresentMon: o RivaTuner Statistics
+// Server mede o FPS dentro do jogo (é liberado pelos anti-cheats) e publica na memória compartilhada RTSSSharedMemoryV2.
+// Só lemos essa memória; o HS TECH não toca no jogo.
+let rtssProc = null;
+let rtssLive = false;            // RTSS aberto (memória compartilhada existe)
+let rtssApps = [];               // [{ pid, app, fps, ms }] da última leitura
+const rtssHist = new Map();      // app -> [{ t, ms }] amostras de frame time (4 por segundo)
+
+function startRtss() {
+  if (rtssProc) return;
+  const script = `
+[Console]::OutputEncoding = [Text.Encoding]::UTF8
+while ($true) {
+  $out = 'none'
+  try {
+    $m = [IO.MemoryMappedFiles.MemoryMappedFile]::OpenExisting('RTSSSharedMemoryV2', [IO.MemoryMappedFiles.MemoryMappedFileRights]::Read)
+    $v = $m.CreateViewAccessor(0, 0, [IO.MemoryMappedFiles.MemoryMappedFileAccess]::Read)
+    if ($v.ReadUInt32(0) -eq 0x52545353) {
+      $size = $v.ReadUInt32(8); $off = $v.ReadUInt32(12); $n = $v.ReadUInt32(16)
+      $now = [uint32]([Environment]::TickCount -band 0xFFFFFFFF)
+      $list = @()
+      for ($i = 0; $i -lt $n; $i++) {
+        $b = $off + $i * $size
+        $procId = $v.ReadUInt32($b); if ($procId -eq 0) { continue }
+        $t0 = $v.ReadUInt32($b + 268); $t1 = $v.ReadUInt32($b + 272); $fr = $v.ReadUInt32($b + 276); $ft = $v.ReadUInt32($b + 280)
+        if ($t1 -le $t0 -or ([int64]$now - $t1) -gt 3000) { continue }
+        $bytes = New-Object byte[] 260; [void]$v.ReadArray($b + 4, $bytes, 0, 260)
+        $name = [IO.Path]::GetFileName(([Text.Encoding]::Default.GetString($bytes)).Split([char]0)[0])
+        $fps = [math]::Round(1000.0 * $fr / ($t1 - $t0), 1)
+        $list += "$procId|$name|$fps|$ft"
+      }
+      $out = 'ok;' + ($list -join ';')
+    }
+    $v.Dispose(); $m.Dispose()
+  } catch {}
+  [Console]::Out.WriteLine($out); [Console]::Out.Flush()
+  Start-Sleep -Milliseconds 250
+}`;
+  rtssProc = spawn('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', script], { windowsHide: true });
+  const sp = lineSplitter((line) => {
+    line = line.trim();
+    rtssLive = line.startsWith('ok');
+    rtssApps = !rtssLive ? [] : line.split(';').slice(1).filter(Boolean).map((e) => {
+      const [pid, app, fps, us] = e.split('|');
+      return { pid: Number(pid), app, fps: parseFloat(fps), ms: Number(us) / 1000 };
+    }).filter((a) => a.app && !IGNORE.test(a.app) && a.fps > 0);
+    const now = Date.now();
+    for (const a of rtssApps) {
+      let arr = rtssHist.get(a.app);
+      if (!arr) { arr = []; rtssHist.set(a.app, arr); }
+      if (a.ms > 0 && a.ms < 1000) arr.push({ t: now, ms: a.ms });
+    }
+  });
+  rtssProc.stdout.on('data', (d) => sp.push(decode(d)));
+  rtssProc.on('close', () => { rtssProc = null; rtssLive = false; rtssApps = []; });
+}
+
+function stopRtss() {
+  if (rtssProc) try { rtssProc.kill(); } catch {}
+  rtssProc = null; rtssLive = false; rtssApps = []; rtssHist.clear();
+}
+
+function rtssStats() {
+  const now = Date.now();
+  for (const [app, arr] of rtssHist) {
+    while (arr.length && now - arr[0].t > 15000) arr.shift();
+    if (!arr.length) rtssHist.delete(app);
+  }
+  const best = [...rtssApps].sort((a, b) => b.fps - a.fps)[0];
+  if (!best) return null;
+  const hist = rtssHist.get(best.app) || [];
+  // 1% low aproximado: só temos 4 amostras de frame time por segundo, não cada quadro
+  const win = hist.filter((f) => now - f.t <= 10000).map((f) => f.ms).sort((a, b) => b - a);
+  const worst = (pct) => { if (!win.length) return null; const n = Math.max(1, Math.floor(win.length * pct)); return 1000 / (win.slice(0, n).reduce((a, b) => a + b, 0) / n); };
+  return {
+    running: true, source: 'rtss', app: best.app, fps: best.fps,
+    frametime: best.ms > 0 ? best.ms : 1000 / best.fps,
+    low1: worst(0.01), low01: worst(0.001), latency: null,
+    graph: hist.slice(-180).map((f) => f.ms)
+  };
+}
+
+// Junta as duas fontes: PresentMon primeiro (mede cada quadro); RTSS quando o PresentMon não vê nenhum jogo.
+let pmStartedAt = 0;
+let pmSawFrame = false;
+const RTSS_DICA = 'Para ver o FPS, abra o RivaTuner Statistics Server (RTSS, gratuito, vem com o MSI Afterburner).';
+function fpsNow() {
+  keepPresentMon();
+  if (wantFps) startRtss();
+  const pm = pmProc || frames.size ? fpsStats() : { running: false, error: pmError };
+  const rt = rtssLive ? rtssStats() : null;
+  // As duas fontes podem ver apps diferentes: o jogo é o que tem mais FPS
+  if (pm.app && (!rt || pm.fps >= rt.fps)) return { ...pm, source: 'presentmon' };
+  if (rt) return rt;
+  if (rtssLive) return { running: true, app: null, source: 'rtss', error: null };
+  // PresentMon rodando há 10 s sem nenhum quadro, com anti-cheat ativo: ele está sendo cegado, não falta jogo
+  const quem = pmProc && !pmSawFrame && Date.now() - pmStartedAt > 10000 ? quemBloqueia() : null;
+  if (quem) return { running: true, app: null, blocked: true, error: `FPS bloqueado: ${quem} esconde os quadros do Windows. ${RTSS_DICA}` };
+  if (pm.error && /bloqueado/i.test(pm.error)) return { ...pm, error: `${pm.error} ${RTSS_DICA}` };
+  return pm;
+}
+
 // ---------------- Loop principal ----------------
 function sample(extra) {
   const total = os.totalmem();
@@ -245,7 +352,7 @@ function sample(extra) {
     gpu: latest.gpu || null,
     net: latest.net || null,
     disk: latest.disk || null,
-    fps: (keepPresentMon(), pmProc || frames.size ? fpsStats() : { running: false, error: pmError }),
+    fps: fpsNow(),
     ...extra()
   };
 }

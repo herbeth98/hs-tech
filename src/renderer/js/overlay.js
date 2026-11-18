@@ -50,7 +50,7 @@
     const has = !!f.app;
     const out = [];
 
-    if (sh.game && has) out.push(`<div class="game up">${esc(f.app.replace(/\.exe$/i, ''))}</div>`);
+    if (sh.game && has) out.push(`<div class="game up">${esc(f.app.replace(/\.exe$/i, ''))}${f.source === 'rtss' ? ' <span class="src">via RTSS</span>' : ''}</div>`);
     if (sh.fps || sh.low1 || sh.low01) {
       const side = [];
       if (sh.low1) side.push(`1% low <b>${has ? r0(f.low1) : '—'}</b>`);
@@ -58,7 +58,7 @@
       out.push(`<div class="fps">${sh.fps ? `<span class="lbl">FPS</span><span class="num">${has ? r0(f.fps) : '—'}</span>` : ''}<span class="side up">${side.join('<br>')}</span></div>`);
     }
     if (!has && (sh.fps || sh.low1 || sh.low01)) {
-      const msg = f.error || (f.running ? 'Aguardando um jogo…' : 'Iniciando a contagem de FPS…');
+      const msg = f.error || (f.running ? (f.source === 'rtss' ? 'Aguardando um jogo… (RTSS aberto)' : 'Aguardando um jogo…') : 'Iniciando a contagem de FPS…');
       out.push(`<div class="fps-msg${f.error ? ' err' : ''}">${esc(msg)}</div>`);
     }
     if (sh.graph && has && f.graph && f.graph.length > 2) out.push('<div id="g"></div>');

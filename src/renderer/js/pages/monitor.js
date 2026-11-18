@@ -120,11 +120,11 @@ function update(el, s) {
   $('#v-net', el).textContent = s.net ? `↓ ${fmtBytes(s.net.rx)}/s · ↑ ${fmtBytes(s.net.tx)}/s` : '—';
   const f = s.fps || {};
   if (f.app) {
-    $('#v-fps', el).textContent = `${f.app}: ${fmt(f.fps)} FPS · 1% low ${fmt(f.low1)} · ${fmt(f.frametime, 1)} ms`;
+    $('#v-fps', el).textContent = `${f.app}: ${fmt(f.fps)} FPS · 1% low ${fmt(f.low1)}${f.source === 'rtss' ? ' (aprox.)' : ''} · ${fmt(f.frametime, 1)} ms${f.source === 'rtss' ? ' · via RTSS' : ''}`;
     const g = f.graph || [];
     drawLine($('#c-fps', el), [g], { max: Math.max(20, ...g) * 1.2, colors: ['primary'], fill: true });
   } else {
-    $('#v-fps', el).textContent = f.running ? 'Aguardando um jogo…' : (f.error ? f.error : '—');
+    $('#v-fps', el).textContent = f.error || (f.running ? 'Aguardando um jogo…' : '—');
   }
 }
 
