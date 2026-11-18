@@ -10,7 +10,7 @@ contextBridge.exposeInMainWorld('hs', {
     return r.data;
   },
   on: (channel, cb) => {
-    if (!EVENTS.includes(channel)) return () => {};
+    if (!EVENTS.includes(channel)) { console.warn(`[preload] evento "${channel}" fora da lista EVENTS: adicione-o em preload.js`); return () => {}; }
     const fn = (_e, payload) => cb(payload);
     ipcRenderer.on(channel, fn);
     return () => ipcRenderer.removeListener(channel, fn);

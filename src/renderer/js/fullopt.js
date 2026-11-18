@@ -11,7 +11,6 @@ const STEPS = [
   ['ai', 'IA da Microsoft: remover Copilot e bloquear Recall', true],
   ['clean', 'Limpeza segura: temporários, cache do Windows Update, despejos e logs', true]
 ];
-const GROUPS = { perf: 'Desempenho', games: 'Jogos', input: 'Input lag', fps: 'Estabilidade de FPS', privacy: 'Privacidade', ai: 'IA da Microsoft' };
 
 // direct = true: pula a lista de etapas e roda direto o preset (usado pelo Boost do Painel)
 export async function runFullOptimization(btn, preset, onDone, direct = false) {
@@ -40,8 +39,7 @@ export async function runFullOptimization(btn, preset, onDone, direct = false) {
   let done = 0; let errors = 0;
   try {
     const status = await api.call('tweaks:status');
-    const groups = chosen.filter((c) => GROUPS[c]).map((c) => GROUPS[c]);
-    const todo = status.filter((t) => t.recommended && groups.includes(t.group) && t.active !== true);
+    const todo = status.filter((t) => t.recommended && chosen.includes(t.groupKey) && t.active !== true);
     const total = (chosen.includes('restore') ? 1 : 0) + todo.length + (chosen.includes('clean') ? 1 : 0);
     const tick = () => { done++; bar.style.width = `${Math.round((done / Math.max(1, total)) * 100)}%`; };
 
@@ -59,11 +57,11 @@ export async function runFullOptimization(btn, preset, onDone, direct = false) {
       } catch (e) { errors++; log('  ✗ ' + e.message, 'err'); }
       tick();
     }
-    const already = status.filter((t) => t.recommended && groups.includes(t.group) && t.active === true).length;
+    const already = status.filter((t) => t.recommended && chosen.includes(t.groupKey) && t.active === true).length;
     if (already) log(`${already} ajuste(s) recomendados já estavam aplicados.`);
     if (chosen.includes('clean')) {
       log('▶ Limpeza segura…', 'step');
-      const r = await api.call('clean:run', ['usertemp', 'wintemp', 'wucache', 'dumps', 'logs', 'delivery']).catch((e) => { log('✗ ' + e.message, 'err'); return null; });
+      const r = await api.call('clean:run', 'safe').catch((e) => { log('✗ ' + e.message, 'err'); return null; });
       if (r) log(`  ✓ ${(r.freed / 1024 / 1024).toFixed(0)} MB liberados`, 'ok');
       tick();
     }

@@ -55,7 +55,7 @@ async function run(el) {
   try {
     const status = steps.some((s) => ['privacy', 'ai', 'boost'].includes(s)) ? await api.call('tweaks:status') : [];
     const applyGroups = async (groups) => {
-      const todo = status.filter((t) => t.recommended && groups.includes(t.group) && t.active !== true);
+      const todo = status.filter((t) => t.recommended && groups.includes(t.groupKey) && t.active !== true);
       for (const t of todo) {
         try { await api.call('tweaks:set', t.id, true); log(`  ✓ ${t.title}`, 'ok'); } catch (e) { log(`  ✗ ${t.title}: ${e.message}`, 'err'); }
       }
@@ -68,10 +68,10 @@ async function run(el) {
         if (s === 'restore') { const r = await api.call('restore:create', 'HS TECH - Windows novo', 'newwin'); if (!r) log('  Seguindo sem ponto de restauração.', 'err'); }
         if (s === 'apps') { if (appIds.length) { const r = await api.call('winget:install', appIds, 'newwin'); log(`  ${r.filter((x) => x.ok).length} de ${r.length} programa(s) instalados`, 'ok'); } else log('  Nenhum programa marcado.'); }
         if (s === 'debloat') { const list = await api.call('debloat:list'); const rec = list.filter((a) => a.recommended).map((a) => a.name); if (rec.length) await api.call('debloat:remove', rec); else log('  Nada para remover.'); }
-        if (s === 'privacy') await applyGroups(['Privacidade']);
-        if (s === 'ai') await applyGroups(['IA da Microsoft']);
-        if (s === 'boost') await applyGroups(['Desempenho', 'Jogos', 'Input lag', 'Estabilidade de FPS']);
-        if (s === 'clean') { const r = await api.call('clean:run', ['usertemp', 'wintemp', 'wucache', 'dumps', 'logs', 'delivery']); log(`  ✓ ${(r.freed / 1048576).toFixed(0)} MB liberados`, 'ok'); }
+        if (s === 'privacy') await applyGroups(['privacy']);
+        if (s === 'ai') await applyGroups(['ai']);
+        if (s === 'boost') await applyGroups(['perf', 'games', 'input', 'fps']);
+        if (s === 'clean') { const r = await api.call('clean:run', 'safe'); log(`  ✓ ${(r.freed / 1048576).toFixed(0)} MB liberados`, 'ok'); }
         mark(s, 'concluído', 'ok');
       } catch (e) { log(`  ✗ ${e.message}`, 'err'); mark(s, 'com erro', 'bad'); }
       tick();

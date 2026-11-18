@@ -47,6 +47,18 @@ foreach ($s in $set) { powercfg /setacvalueindex $hs $s[0] $s[1] $s[2] 2>$null }
 powercfg /setactive $hs
 Write-Output 'Plano HS TECH ativo.'`;
 
+// Fonte única dos grupos: a interface lê daqui (tweaks:groups e campos groupKey/groupIcon do status).
+const GROUPS = [
+  { key: 'perf', name: 'Desempenho', label: 'Desempenho', icon: 'bolt' },
+  { key: 'games', name: 'Jogos', label: 'Jogos', icon: 'game' },
+  { key: 'input', name: 'Input lag', label: 'Input Lag', icon: 'mouse' },
+  { key: 'fps', name: 'Estabilidade de FPS', label: 'Estabilidade de FPS', icon: 'activity' },
+  { key: 'privacy', name: 'Privacidade', label: 'Privacidade', icon: 'shield' },
+  { key: 'ai', name: 'IA da Microsoft', label: 'IA da Microsoft', icon: 'sparkle' },
+  { key: 'security', name: 'Segurança', label: 'Segurança', icon: 'shield' }
+];
+const groupOf = (name) => GROUPS.find((g) => g.name === name) || {};
+
 const TWEAKS = [
   // ---------------- Desempenho ----------------
   {
@@ -415,7 +427,7 @@ async function status() {
   const parts = TWEAKS.map((t) => `try { $r['${t.id}'] = [bool](& { ${t.check} }) } catch { $r['${t.id}'] = $null }`);
   const script = `$r = @{}\n${parts.join('\n')}\n$r | ConvertTo-Json -Compress`;
   const states = await psJson(script);
-  return TWEAKS.map(({ id, group, title, desc, risk, recommended, note }) => ({ id, group, title, desc, risk, recommended, note, active: states ? states[id] : null }));
+  return TWEAKS.map(({ id, group, title, desc, risk, recommended, note }) => ({ id, group, groupKey: groupOf(group).key, groupIcon: groupOf(group).icon, title, desc, risk, recommended, note, active: states ? states[id] : null }));
 }
 
 async function set(id, enable, log = () => {}) {
@@ -509,4 +521,4 @@ if ($ok) { Write-Output 'OK' }`);
   return results;
 }
 
-module.exports = { status, set, TWEAKS, nvidiaStatus, nvidiaCloseOverlay, appxList, appxRemove };
+module.exports = { status, set, TWEAKS, GROUPS, nvidiaStatus, nvidiaCloseOverlay, appxList, appxRemove };

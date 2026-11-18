@@ -1,15 +1,15 @@
 import { api, call, esc, icon, busy, modal, toast, $, $$ } from '../ui.js';
 import { runFullOptimization } from '../fullopt.js';
 
-const GROUPS = ['Desempenho', 'Jogos', 'Input lag', 'Estabilidade de FPS', 'Privacidade', 'IA da Microsoft', 'Segurança'];
 let tab = 'Desempenho';
 let data = [];
 
 export async function render(el) {
+  const groups = await call('tweaks:groups').catch(() => []);
   el.innerHTML = `
   <div class="page-head"><div><h1>Otimização</h1><p>Cada ajuste mostra o estado atual do seu Windows. Ligue ou desligue quando quiser: tudo tem como desfazer.</p></div>
     <div class="actions"><button class="btn" id="recApply">${icon('sparkle')}Aplicar Recomendados</button><button class="btn primary" id="full">${icon('bolt')}Fazer Otimização Completa</button></div></div>
-  <div class="tabs" id="tabs">${GROUPS.map((g) => `<button data-g="${esc(g)}" class="${g === tab ? 'active' : ''}">${esc(g === 'Input lag' ? 'Input Lag' : g)}</button>`).join('')}</div>
+  <div class="tabs" id="tabs">${groups.map((g) => `<button data-g="${esc(g.name)}" class="${g.name === tab ? 'active' : ''}">${esc(g.label)}</button>`).join('')}</div>
   <div id="extra"></div>
   <div class="card"><div class="list" id="list"><div class="empty">Lendo o estado atual dos ajustes…</div></div></div>`;
   $('#full', el).addEventListener('click', (e) => runFullOptimization(e.currentTarget));

@@ -3,7 +3,6 @@ import { runFullOptimization } from '../fullopt.js';
 
 let off = [];
 let timers = [];
-const SAFE_CLEAN = ['usertemp', 'wintemp', 'wucache', 'dumps', 'logs', 'delivery'];
 const HIST = 60;
 const hist = { cpu: [], gpu: [], ram: [], disk: [], net: [] };
 let tab = 'cpu';
@@ -99,7 +98,7 @@ export async function render(el) {
     loadRestore(el);
   }, 'Criando…'));
   $('#clBtn', el).addEventListener('click', (e) => busy(e.currentTarget, async () => {
-    const r = await call('clean:run', SAFE_CLEAN);
+    const r = await call('clean:run', 'safe');
     toast(`${fmtBytes(r.freed)} liberados`, 'ok');
     loadClean(el);
   }, 'Limpando…'));
@@ -187,7 +186,7 @@ function drawRecs(el, missing) {
   if (!box) return;
   if (!missing.length) { box.innerHTML = `<div class="all-good"><span class="all-good-ic">${icon('ok')}</span><div><b>Tudo em dia</b><div class="small muted">Nenhum ajuste recomendado pendente. Rode o Check-up de vez em quando para conferir o PC.</div></div><button class="btn sm" data-go2="checkup">Abrir Check-up</button></div>`; box.querySelector('[data-go2]').addEventListener('click', () => navigate('checkup')); return; }
   box.innerHTML = missing.slice(0, 6).map((t) => `
-    <div class="item rec"><span class="rec-ic">${icon(groupIcon(t.group))}</span>
+    <div class="item rec"><span class="rec-ic">${icon(t.groupIcon || 'bolt')}</span>
       <div class="grow"><div class="title">${esc(t.title)}</div><div class="desc ellipsis" title="${esc(t.desc)}">${esc(t.desc)}</div></div>
       <span class="badge">${esc(t.group)}</span>
       <button class="btn sm primary" data-apply="${t.id}">Aplicar</button></div>`).join('');
@@ -197,10 +196,6 @@ function drawRecs(el, missing) {
     toast(`${t ? t.title : 'Ajuste'} aplicado`, 'ok');
     setTimeout(() => loadScore(el), 900);
   }, 'Aplicando…')));
-}
-
-function groupIcon(g) {
-  return { Desempenho: 'bolt', Jogos: 'game', 'Input lag': 'mouse', 'Estabilidade de FPS': 'activity', Privacidade: 'shield', 'IA da Microsoft': 'sparkle', Segurança: 'shield' }[g] || 'bolt';
 }
 
 // ---------------- Boost ----------------
@@ -246,7 +241,7 @@ async function loadClean(el) {
   $('#clSub', el).textContent = 'Calculando…';
   const cats = await api.call('clean:scan').catch(() => null);
   if (!cats || !el.isConnected) return;
-  const total = cats.filter((c) => SAFE_CLEAN.includes(c.id)).reduce((a, c) => a + c.bytes, 0);
+  const total = cats.filter((c) => c.checked).reduce((a, c) => a + c.bytes, 0);
   $('#clVal', el).textContent = fmtBytes(total);
   $('#clSub', el).textContent = 'Temporários, cache de atualizações e logs';
 }

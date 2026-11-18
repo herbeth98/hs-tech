@@ -119,7 +119,9 @@ async function cleanDir(p, onlyExt, log) {
   return { freed, failed };
 }
 
+// ids = 'safe' limpa as categorias marcadas por padrão (checked: true): é a "limpeza segura" usada pelo Boost e assistentes.
 async function clean(ids, log = () => {}) {
+  if (ids === 'safe') ids = CATEGORIES.filter((c) => c.checked).map((c) => c.id);
   let freed = 0;
   let failed = 0;
   for (const c of CATEGORIES.filter((x) => ids.includes(x.id))) {

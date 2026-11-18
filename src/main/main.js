@@ -309,6 +309,7 @@ Write-Output ok`);
 
   // Ajustes
   handle('tweaks:status', async () => tweaks.status());
+  handle('tweaks:groups', async () => tweaks.GROUPS);
   handle('tweaks:set', async (id, enable) => tweaks.set(id, enable, logger('tweaks')));
   handle('nvidia:status', async () => tweaks.nvidiaStatus());
   handle('nvidia:closeOverlay', async () => tweaks.nvidiaCloseOverlay());
