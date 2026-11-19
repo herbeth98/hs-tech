@@ -9,7 +9,7 @@ npm install
 npm start
 ```
 
-Rode o terminal como administrador: ajustes do Windows, limpeza de pastas do sistema, reparos e a leitura de FPS precisam dessa permissão.
+Rode o terminal como administrador: ajustes do Windows, limpeza de pastas do sistema, e reparos precisam dessa permissão.
 
 ## Gerar o instalador e a versão portátil
 
@@ -29,7 +29,7 @@ Os dois pedem administrador (`requireAdministrator`).
 ```
 src/
   main/                processo principal (Electron)
-    main.js            janelas, IPC, bandeja, overlay, atalho global, autoteste
+    main.js            janelas, IPC, bandeja, autoteste
     preload.js         ponte window.hs (call/on, com lista de eventos permitidos)
     ps.js              executor de PowerShell (arquivos .ps1 temporários) e de programas
     bench.js           apoio ao benchmark
@@ -49,13 +49,12 @@ src/
       diagnostico.js   leitura dos registros de desligamento e erros
   renderer/            interface
     index.html         tela de abertura, fundo, barra de título, menu lateral
-    overlay.html       overlay de FPS
     tokens.css         tokens do design system (cores, raio, espaçamento, movimento)
     styles.css         componentes e animações
     js/app.js          rotas, menu, abertura, pausa das animações fora de foco
     js/bg.js           fundo interativo que segue o mouse
     js/pages/          uma página por arquivo
-tools/                 ícone, banner antigo e animação de teste do overlay
+tools/                 ícone e banner antigo
 docs/vitrine/          ilustrações animadas do README (geradas por gerar.py)
 ```
 
@@ -67,13 +66,12 @@ docs/vitrine/          ilustrações animadas do README (geradas por gerar.py)
   - perfis do driver NVIDIA pela NVAPI (DRS);
   - topologia da CPU com `GetLogicalProcessorInformationEx` (núcleos físicos, SMT, núcleos de desempenho);
   - limpeza da lista de espera da RAM com `NtSetSystemInformation`.
-- Os eventos ao vivo (monitor, overlay, progresso) chegam pela lista de eventos permitidos do `preload.js`.
+- Os eventos ao vivo (monitor, progresso) chegam pela lista de eventos permitidos do `preload.js`.
 
 ## Fontes dos dados
 
 | Dado | De onde vem |
 |---|---|
-| FPS, 1% e 0,1% low, frame time | [PresentMon](https://github.com/GameTechDev/PresentMon) 2.6, baixado pelo próprio app. Sessão ETW `HSTECH_PM`, encerrada com `logman` |
 | GPU NVIDIA | `nvidia-smi` em laço (`-lms`) |
 | Clock e uso da CPU | contadores `ProcessorInformation` (frequência × % de desempenho) |
 | Discos | contadores `PerfDisk` e `StorageReliabilityCounter` (temperatura) |
@@ -97,7 +95,7 @@ A temperatura do processador não aparece: o Windows não expõe esse sensor sem
 
 - Dados do app em `%APPDATA%\HS TECH`.
 - As animações decorativas pausam com a janela fora de foco. O app respeita a opção "reduzir movimento" do Windows.
-- O empacotado usa `disable-gpu-sandbox`, e o overlay roda com `sandbox: false`; sem isso, a GPU e o overlay falham em alguns PCs.
+- O empacotado usa `disable-gpu-sandbox`; sem isso, a GPU falha em alguns PCs.
 
 ## Autoteste
 
@@ -113,7 +111,6 @@ HSTECH_SELFTEST=<pasta> npx electron . --user-data-dir=<pasta-temporária>
 | `HSTECH_WAIT` | espera antes de cada captura (ms) |
 | `HSTECH_H` | altura da janela |
 | `HSTECH_DEMO=1` | esconde o nome do usuário e do computador |
-| `HSTECH_OVERLAY` | abre o overlay por N ms |
 | `HSTECH_BENCH` | roda o benchmark |
 | `HSTECH_NOBG` | desliga o fundo animado |
 | `HSTECH_VISIBLE` | mostra a janela na tela |
@@ -132,5 +129,4 @@ Gera os SVG animados de `docs/vitrine/`. As animações são só CSS dentro de c
 
 - HS TECH: [MIT](../LICENSE).
 - [Electron](https://github.com/electron/electron) e [electron-builder](https://github.com/electron-userland/electron-builder): MIT.
-- [PresentMon](https://github.com/GameTechDev/PresentMon): MIT, baixado na primeira vez que o FPS é medido.
 - [Public Sans](https://github.com/uswds/public-sans): SIL Open Font License 1.1.

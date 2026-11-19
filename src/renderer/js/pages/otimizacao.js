@@ -83,7 +83,7 @@ async function drawExtra(el) {
           <span class="badge">${esc(s.appName || 'NVIDIA App não encontrado')} ${esc(s.version || '')}</span><span class="spacer"></span>
           <button class="btn sm" id="nvClose" ${running.length ? '' : 'disabled'}>Fechar Overlay</button>
           <button class="btn sm" id="nvOpen" ${s.appExe ? '' : 'disabled'}>Abrir NVIDIA App</button></div>
-        <p class="small muted" style="margin-bottom:0">O overlay da NVIDIA (gravação, filtros, estatísticas) consome um pouco de GPU e pode conflitar com outros overlays. Para desligar de vez: NVIDIA App → Configurações → Recursos → <b>Sobreposição no jogo</b> → Desligado. O overlay do HS TECH mostra FPS sem depender dele.</p>`;
+        <p class="small muted" style="margin-bottom:0">O overlay da NVIDIA (gravação, filtros, estatísticas) consome um pouco de GPU e pode conflitar com outros overlays. Para desligar de vez: NVIDIA App → Configurações → Recursos → <b>Sobreposição no jogo</b> → Desligado.</p>`;
       $('#nvClose', el)?.addEventListener('click', async () => { await call('nvidia:closeOverlay'); toast('Overlay da NVIDIA fechado', 'ok'); drawExtra(el); });
       $('#nvOpen', el)?.addEventListener('click', () => call('nvidia:openApp', s.appExe));
     } catch {}
@@ -91,7 +91,7 @@ async function drawExtra(el) {
     box.innerHTML = `<div class="callout danger mb"><b>Atenção:</b> desligar o Defender deixa o PC sem proteção. A <b>Proteção contra adulteração</b> precisa estar desligada em Segurança do Windows para o HS TECH conseguir mudar isso. <button class="btn sm" id="wd" style="margin-left:8px">Abrir Segurança do Windows</button></div>`;
     $('#wd', el).addEventListener('click', () => call('shell:run', 'windowsdefender'));
   } else if (tab === 'Input lag' || tab === 'Estabilidade de FPS') {
-    box.innerHTML = `<div class="callout mb">Para medir o efeito, abra o <b>overlay</b> (Ctrl+Shift+F10) e compare o <b>1% low</b> e o gráfico de frame time antes e depois. Nos jogos com <b>NVIDIA Reflex</b>, ative o Reflex no jogo: ele reduz mais input lag que qualquer ajuste do Windows.</div>`;
+    box.innerHTML = `<div class="callout mb">Para medir o efeito, compare o FPS mostrado pelo próprio jogo (ou pelo overlay da NVIDIA, Alt+R) antes e depois. Nos jogos com <b>NVIDIA Reflex</b>, ative o Reflex no jogo: ele reduz mais input lag que qualquer ajuste do Windows.</div>`;
   }
 }
 

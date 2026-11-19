@@ -44,7 +44,7 @@ const NAV = [
     ['diagnostico', 'Diagnóstico', 'shield'], ['drivers', 'Drivers', 'chip'], ['windows-novo', 'Windows Novo', 'sparkle'], ['reparo', 'Manutenção', 'wrench']
   ] },
   { title: 'Ferramentas', items: [
-    ['monitor', 'Monitor e Overlay', 'activity'], ['rede', 'Rede', 'wifi'], ['testes', 'Testes', 'mouse'], ['config', 'Configurações', 'settings']
+    ['monitor', 'Monitor', 'activity'], ['rede', 'Rede', 'wifi'], ['testes', 'Testes', 'mouse'], ['config', 'Configurações', 'settings']
   ] }
 ];
 

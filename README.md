@@ -21,7 +21,6 @@
 
 <p align="center">
   <img src="docs/vitrine/ajustes.svg" alt="Ajustes para jogos: mais FPS e menos atraso no clique. Cada ajuste mostra se já está ligado e pode ser desligado." width="100%">
-  <img src="docs/vitrine/overlay.svg" alt="Por cima do jogo: um painel pequeno mostra FPS, 1% low, CPU, placa de vídeo e ping enquanto você joga." width="100%">
   <img src="docs/vitrine/hardware.svg" alt="Dentro do PC: processador, placa de vídeo, memória e discos ao vivo, com valor atual, mínimo e máximo." width="100%">
   <img src="docs/vitrine/jogos.svg" alt="Seus jogos: ele encontra os jogos instalados e deixa escolher núcleos, prioridade e placa de vídeo para cada um." width="100%">
   <img src="docs/vitrine/diagnostico.svg" alt="Quando algo dá errado: ele lê os registros do Windows, mostra o motivo provável de um desligamento e o que fazer." width="100%">
@@ -33,13 +32,6 @@
 
 <p align="center">
   <img src="docs/vitrine/confianca.svg" alt="Tudo pode ser desfeito. Cada ajuste tem um botão para voltar ao que era, há ponto de restauração antes das mudanças grandes e nada sai do seu PC." width="100%">
-</p>
-
-<h2 align="center">Para quem joga</h2>
-
-<p align="center">
-  Abra o jogo e aperte <b>Ctrl + Shift + F10</b> para ver o FPS por cima da tela.<br>
-  Compare o <b>1% low</b> antes e depois dos ajustes: é ele que mostra se as travadinhas sumiram.
 </p>
 
 <br>

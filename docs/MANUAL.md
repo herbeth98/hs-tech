@@ -44,17 +44,17 @@ Este manual passa por cada tela do app, na ordem do menu lateral. Para instalar,
 
 ## Ferramentas
 
-**Monitor e Overlay.** Gráficos de processador, placa de vídeo, memória e disco. Daqui você liga o overlay que fica por cima do jogo, com FPS, 1% e 0,1% low, frame time, CPU, GPU, RAM e ping. O atalho padrão é **Ctrl + Shift + F10**. Ele funciona em janela sem bordas e na maioria dos jogos atuais; em tela cheia exclusiva, troque para janela sem bordas.
+**Monitor.** Gráficos de processador, placa de vídeo, memória, disco e rede em tempo real.
 
 **Rede.** Teste de velocidade, ping e perda de pacotes.
 
 **Testes.** Testes de mouse (taxa de atualização e cliques), de monitor (pixels e cores) e de teclado.
 
-**Configurações.** Atalho do overlay e as outras preferências do app.
+**Configurações.** Preferências do app: bandeja, iniciar com o Windows e outras.
 
 ## Dúvidas comuns
 
-**Por que ele pede para rodar como administrador?** Ajustes do Windows, limpeza de pastas do sistema, reparos e a leitura de FPS só funcionam com essa permissão.
+**Por que ele pede para rodar como administrador?** Ajustes do Windows, limpeza de pastas do sistema, e reparos só funcionam com essa permissão.
 
 **Por que não aparece a temperatura do processador?** O Windows não libera esse sensor sem um driver de baixo nível, e o HS TECH prefere não instalar nenhum. A temperatura da placa de vídeo e dos discos aparece normalmente.
 

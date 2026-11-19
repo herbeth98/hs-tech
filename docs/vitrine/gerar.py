@@ -242,55 +242,6 @@ CSS_AJUSTES = CSS_CHAVE + """
 """
 
 
-def arte_overlay(x0):
-    px, py, pw, ph = x0 + 20, 55, 500, 360
-    s = ['<defs><linearGradient id="ceu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2b55"/><stop offset="1" stop-color="#4a6aa0"/></linearGradient></defs>',
-         f'<clipPath id="jogo"><rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="18"/></clipPath><g clip-path="url(#jogo)">',
-         f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" fill="url(#ceu)"/>',
-         f'<circle cx="{px+380}" cy="{py+120}" r="38" fill="#ffd38a" opacity=".85"/>',
-         f'<g class="nuvem"><ellipse cx="{px+150}" cy="{py+80}" rx="60" ry="14" fill="#fff" opacity=".18"/><ellipse cx="{px+420}" cy="{py+60}" rx="44" ry="10" fill="#fff" opacity=".14"/></g>',
-         f'<path d="M{px} {py+250} L{px+90} {py+170} L{px+170} {py+230} L{px+260} {py+150} L{px+370} {py+240} L{px+440} {py+190} L{px+pw} {py+230} V{py+ph} H{px}Z" fill="#2c3d66"/>',
-         f'<path d="M{px} {py+290} Q{px+150} {py+250} {px+260} {py+285} T{px+pw} {py+270} V{py+ph} H{px}Z" fill="#1a2440"/>',
-         f'<rect x="{px+300}" y="{py+215}" width="46" height="80" fill="#121a30"/><rect x="{px+350}" y="{py+235}" width="34" height="60" fill="#0f1628"/>',
-         f'<rect x="{px+312}" y="{py+230}" width="8" height="8" fill="#ffd38a" opacity=".7"/><rect x="{px+326}" y="{py+250}" width="8" height="8" fill="#ffd38a" opacity=".5"/>',
-         f'<path d="M{px+pw/2-14} {py+ph/2} h9 M{px+pw/2+5} {py+ph/2} h9 M{px+pw/2} {py+ph/2-14} v9 M{px+pw/2} {py+ph/2+5} v9" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>']
-    # painel do overlay
-    ox, oy, ow, oh = px + 16, py + 16, 196, 186
-    s.append(f'<rect x="{ox}" y="{oy}" width="{ow}" height="{oh}" rx="12" fill="#050814" fill-opacity=".84" stroke="{VERDE}" stroke-opacity=".45"/>')
-    s.append(f'<text x="{ox+14}" y="{oy+24}" font-size="12" font-weight="700" letter-spacing="1.5" fill="{VERDE}">FPS</text>')
-    for k, (v, low) in enumerate([("241", "198"), ("238", "196"), ("244", "201")]):
-        cls = "tr" + (" outra" if k else "")
-        d = [0, -2, -1][k]
-        s.append(f'<g class="{cls}" style="animation-delay: {d}s"><text x="{ox+14}" y="{oy+62}" font-size="36" font-weight="700" fill="{TEXTO}">{v}</text>'
-                 f'<text x="{ox+ow-14}" y="{oy+88}" text-anchor="end" font-size="14" font-weight="600" fill="{TEXTO}">{low}</text></g>')
-    s.append(f'<text x="{ox+14}" y="{oy+88}" font-size="14" fill="{CINZA}">1% low</text>')
-    for k, (rot, val) in enumerate([("CPU", "41%"), ("GPU", "87%"), ("Ping", "12 ms")]):
-        y = oy + 112 + k * 22
-        s.append(f'<text x="{ox+14}" y="{y}" font-size="14" fill="{CINZA}">{rot}</text>'
-                 f'<text x="{ox+ow-14}" y="{y}" text-anchor="end" font-size="14" font-weight="600" fill="{TEXTO}">{val}</text>')
-    rnd = random.Random(4)
-    ft = [.5 + rnd.uniform(-.18, .18) for _ in range(20)]
-    ft[6] = .95
-    ft[-1] = ft[0]
-    s.append(f'<clipPath id="ft"><rect x="{ox+14}" y="{oy+oh-26}" width="{ow-28}" height="18"/></clipPath>')
-    s.append(f'<g clip-path="url(#ft)"><polyline class="rolaFt" points="{linha_grafico(ox+14, oy+oh-26, ow-28, 18, ft)}" fill="none" stroke="{VERDE}" stroke-width="1.6"/></g>')
-    s.append("</g>")
-    s.append(f'<rect x="{px}" y="{py}" width="{pw}" height="{ph}" rx="18" fill="none" stroke="#fff" stroke-opacity=".12"/>')
-    s.append(f'<rect x="{px+pw-170}" y="{py+ph+14}" width="170" height="34" rx="17" fill="{CARTAO}" stroke="#fff" stroke-opacity=".12"/>'
-             f'<text x="{px+pw-85}" y="{py+ph+36}" text-anchor="middle" font-size="14" fill="{TEXTO}">Ctrl + Shift + F10</text>')
-    return "".join(s)
-
-
-CSS_OVERLAY = """
-@keyframes tr { 0%, 33% { opacity: 1; } 33.4%, 100% { opacity: 0; } }
-@keyframes nuvem { 50% { transform: translateX(40px); } }
-@keyframes rolaFt { to { transform: translateX(-168px); } }
-.tr { animation: tr 3s linear infinite both; }
-.nuvem { animation: nuvem 14s ease-in-out infinite; }
-.rolaFt { animation: rolaFt 4s linear infinite; }
-"""
-
-
 def arte_hwmon(x0):
     s = [cartao(x0 + 20, 40, 500, 395)]
     grupos = [("Processador", VERDE, [("Uso total", "38%", .38), ("Núcleo 1", "4,6 GHz", .92), ("Núcleo 2", "4,4 GHz", .86)]),
@@ -568,24 +519,21 @@ abertura()
 faixa("ajustes", "AJUSTES PARA JOGOS", ["Mais FPS, menos", "atraso no clique."],
       ["Cada ajuste mostra se já está ligado", "no seu Windows. Ligue o que quiser", "e desligue quando quiser."],
       arte_ajustes, CSS_AJUSTES, "esq", parado=".tremido { display: none; }")
-faixa("overlay", "POR CIMA DO JOGO", ["Seu FPS na tela,", "sem atrapalhar."],
-      ["Um painel pequeno mostra o FPS, o 1% low,", "a CPU, a placa de vídeo e o ping", "enquanto você joga. Um atalho", "mostra e esconde."],
-      arte_overlay, CSS_OVERLAY, "dir", (CIANO, INDIGO, VERDE), parado=".outra { display: none; }")
 faixa("hardware", "DENTRO DO PC", ["Cada peça do PC,", "ao vivo."],
       ["Processador, placa de vídeo, memória,", "discos e rede, com o valor de agora,", "o mínimo e o máximo. Dá para", "gravar tudo e abrir no Excel."],
-      arte_hwmon, CSS_HWMON, "esq", (VERDE, CIANO, "#a78bfa"))
+      arte_hwmon, CSS_HWMON, "dir", (VERDE, CIANO, "#a78bfa"))
 faixa("jogos", "SEUS JOGOS", ["Ele acha seus jogos", "sozinho."],
       ["Steam, Epic, Xbox e outras lojas.", "Para cada jogo, você escolhe os", "núcleos, a prioridade e a placa de", "vídeo. Vale só para aquele jogo."],
-      arte_jogos, CSS_JOGOS, "dir", ("#ff7ab6", INDIGO, VERDE))
+      arte_jogos, CSS_JOGOS, "esq", ("#ff7ab6", INDIGO, VERDE))
 faixa("diagnostico", "QUANDO ALGO DÁ ERRADO", ["Ele conta o que", "aconteceu."],
       ["O PC desligou sozinho? Ele lê os", "registros do Windows, diz o motivo", "provável e o que fazer, em ordem."],
-      arte_diag, CSS_DIAG, "esq", (AMBAR, INDIGO, VERDE))
+      arte_diag, CSS_DIAG, "dir", (AMBAR, INDIGO, VERDE))
 faixa("limpeza", "LIMPEZA", ["Espaço de volta e", "memória mais leve."],
       ["Apaga temporários, caches e restos", "de atualização. A memória RAM", "também é liberada sem fechar", "nenhum programa."],
-      arte_limpeza, CSS_LIMPEZA, "dir", (VERDE, "#a78bfa", CIANO), parado=".antes { display: none; }")
+      arte_limpeza, CSS_LIMPEZA, "esq", (VERDE, "#a78bfa", CIANO), parado=".antes { display: none; }")
 faixa("formatar", "ACABOU DE FORMATAR?", ["O Windows pronto", "de uma vez."],
       ["Marque seus programas e ele instala", "todos. Também tira os apps que vêm", "de fábrica, desliga a telemetria e", "remove o Copilot."],
-      arte_formatar, CSS_FORMATAR, "esq", (CIANO, VERDE, INDIGO))
+      arte_formatar, CSS_FORMATAR, "dir", (CIANO, VERDE, INDIGO))
 confianca()
 passos()
 botao()

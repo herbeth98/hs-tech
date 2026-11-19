@@ -1,7 +1,7 @@
 // Ponte segura entre a interface e o processo principal.
 const { contextBridge, ipcRenderer } = require('electron');
 
-const EVENTS = ['log', 'monitor:sample', 'ping:sample', 'speed:progress', 'overlay:state', 'overlay:config', 'fps:download', 'bench:disk', 'games:applied', 'hw:sample'];
+const EVENTS = ['log', 'monitor:sample', 'ping:sample', 'speed:progress', 'bench:disk', 'games:applied', 'hw:sample'];
 
 contextBridge.exposeInMainWorld('hs', {
   call: async (channel, ...args) => {
@@ -14,6 +14,5 @@ contextBridge.exposeInMainWorld('hs', {
     const fn = (_e, payload) => cb(payload);
     ipcRenderer.on(channel, fn);
     return () => ipcRenderer.removeListener(channel, fn);
-  },
-  resizeOverlay: (width, height) => ipcRenderer.send('overlay:resize', { width, height })
+  }
 });

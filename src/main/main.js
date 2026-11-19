@@ -1,5 +1,5 @@
 // Processo principal do HS TECH.
-const { app, BrowserWindow, ipcMain, shell, dialog, Tray, Menu, nativeImage, globalShortcut, screen } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, Tray, Menu, nativeImage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
@@ -32,14 +32,9 @@ if (!app.requestSingleInstanceLock()) { app.quit(); process.exit(0); }
 const RENDERER = path.join(__dirname, '..', 'renderer');
 const ICON = path.join(RENDERER, 'assets', 'icon.png');
 const USER = app.getPath('userData');
-const BIN = path.join(USER, 'bin');
 const SETTINGS_FILE = path.join(USER, 'settings.json');
 
 const DEFAULT_SETTINGS = {
-  overlay: {
-    position: 'top-left', scale: 1, opacity: 0.85, hotkey: 'Control+Shift+F10',
-    show: { fps: true, low1: true, low01: false, frametime: true, graph: true, cpu: true, cpuClock: true, gpu: true, gpuTemp: true, vram: true, ram: true, ping: true, loss: true, speed: false, game: true, clock: true, power: true }
-  },
   pingHost: '1.1.1.1',
   minimizeToTray: true,
   startHidden: false,
@@ -49,7 +44,6 @@ const DEFAULT_SETTINGS = {
 
 let settings = loadSettings();
 let win = null;
-let overlay = null;
 let tray = null;
 let quitting = false;
 let pingSession = null;
@@ -58,8 +52,8 @@ const procRegistry = new Map(); // escopo -> Set de processos filhos
 
 function loadSettings() {
   try {
-    const s = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8'));
-    return { ...DEFAULT_SETTINGS, ...s, overlay: { ...DEFAULT_SETTINGS.overlay, ...(s.overlay || {}), show: { ...DEFAULT_SETTINGS.overlay.show, ...((s.overlay || {}).show || {}) } } };
+    const { overlay: _antigo, ...s } = JSON.parse(fs.readFileSync(SETTINGS_FILE, 'utf8')); // "overlay" de versões antigas é descartado
+    return { ...DEFAULT_SETTINGS, ...s };
   } catch { return JSON.parse(JSON.stringify(DEFAULT_SETTINGS)); }
 }
 function saveSettings() { fs.mkdirSync(USER, { recursive: true }); fs.writeFileSync(SETTINGS_FILE, JSON.stringify(settings, null, 2)); }
@@ -95,88 +89,10 @@ function createWindow() {
   win.webContents.setWindowOpenHandler(({ url }) => { shell.openExternal(url); return { action: 'deny' }; });
 }
 
-function overlayBounds(w = 270, h = 300) {
-  const d = screen.getPrimaryDisplay().bounds;
-  const m = 12;
-  const pos = settings.overlay.position;
-  const x = pos.includes('right') ? d.x + d.width - w - m : d.x + m;
-  const y = pos.includes('bottom') ? d.y + d.height - h - m : d.y + m;
-  return { x: Math.round(x), y: Math.round(y), width: Math.round(w), height: Math.round(h) };
-}
-
-function createOverlay() {
-  if (overlay && !overlay.isDestroyed()) return overlay;
-  overlay = new BrowserWindow({
-    ...overlayBounds(), transparent: true, frame: false, resizable: false, movable: false, focusable: false,
-    skipTaskbar: true, alwaysOnTop: true, hasShadow: false, show: false, fullscreenable: false,
-    // sandbox: false igual à janela principal: no .exe elevado (requireAdministrator) o sandbox do Chromium
-    // não sobe e o processo do overlay morre, deixando a janela transparente e vazia.
-    webPreferences: { preload: path.join(__dirname, 'preload.js'), contextIsolation: true, nodeIntegration: false, sandbox: false, backgroundThrottling: false }
-  });
-  overlay.setAlwaysOnTop(true, 'screen-saver');
-  overlay.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
-  overlay.setIgnoreMouseEvents(true);
-  overlay.loadFile(path.join(RENDERER, 'overlay.html'));
-  overlay.on('closed', () => { overlay = null; });
-  // Diagnóstico do overlay em %APPDATA%\HS TECH\overlay.log
-  const olog = (msg) => { try { fs.appendFileSync(path.join(USER, 'overlay.log'), `${new Date().toISOString()} ${msg}\n`); } catch {} };
-  overlay.webContents.on('did-fail-load', (_e, code, desc, url) => olog(`did-fail-load ${code} ${desc} ${url}`));
-  overlay.webContents.on('render-process-gone', (_e, d) => olog(`render-process-gone ${d.reason} ${d.exitCode}`));
-  overlay.webContents.on('console-message', (_e, level, message, line, source) => { if (level >= 2) olog(`console[${level}] ${message} (${path.basename(source || '')}:${line})`); });
-  overlay.webContents.on('did-finish-load', () => olog(`did-finish-load bounds=${JSON.stringify(overlay.getBounds())}`));
-  return overlay;
-}
-
-// Nomes curtos do hardware para os blocos do overlay ("AMD Ryzen 7 7800X3D 8-Core Processor" -> "Ryzen 7 7800X3D")
-function shortName(n) {
-  return String(n || '')
-    .replace(/\(R\)|\(TM\)|®|™/gi, '')
-    .replace(/\b\d+-Core Processor\b|\bProcessor\b|\bCPU\b.*$/i, '')
-    .replace(/^(AMD|Intel|NVIDIA)\s+/i, '')
-    .replace(/GeForce\s+/i, '')
-    .replace(/\s*@.*$/, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-function overlayConfig() {
-  const gpus = (sysInfo && sysInfo.gpus) || [];
-  const gpu = gpus.find((g) => /NVIDIA|Radeon RX|Arc/i.test(g.name)) || gpus[0] || {};
-  return {
-    ...settings.overlay,
-    hw: { cpu: shortName(sysInfo && sysInfo.cpu) || 'CPU', gpu: shortName(gpu.name) || 'GPU', vram: gpu.vram || 0, ram: sysInfo ? sysInfo.ramTotal : 0 }
-  };
-}
-
-function setOverlay(visible) {
-  if (visible) {
-    const o = createOverlay();
-    o.webContents.once('did-finish-load', () => o.webContents.send('overlay:config', overlayConfig()));
-    if (!o.webContents.isLoading()) o.webContents.send('overlay:config', overlayConfig());
-    o.showInactive();
-    ensureMonitor();
-    ensurePing();
-    if (monitor.presentMonPath(BIN)) monitor.startPresentMon();
-    else monitor.downloadPresentMon(BIN).then(() => monitor.startPresentMon()).catch(() => {}); // primeira vez: baixa sozinho
-  } else if (overlay && !overlay.isDestroyed()) {
-    overlay.close();
-    overlay = null;
-  }
-  send('overlay:state', !!(overlay && !overlay.isDestroyed()));
-  updateTrayMenu();
-  return !!overlay;
-}
-
-function registerHotkey() {
-  globalShortcut.unregisterAll();
-  try { globalShortcut.register(settings.overlay.hotkey || 'Control+Shift+F10', () => setOverlay(!(overlay && !overlay.isDestroyed()))); } catch {}
-}
-
 function updateTrayMenu() {
   if (!tray) return;
-  const on = !!(overlay && !overlay.isDestroyed());
   tray.setContextMenu(Menu.buildFromTemplate([
     { label: 'Abrir HS TECH', click: () => { win.show(); win.focus(); } },
-    { label: on ? 'Esconder overlay' : 'Mostrar overlay', click: () => setOverlay(!on) },
     { type: 'separator' },
     { label: 'Sair', click: () => { quitting = true; app.quit(); } }
   ]));
@@ -196,14 +112,8 @@ function ensureMonitor() {
   monitorStarted = true;
   const base = sysInfo ? sysInfo.cpuMaxMhz : 0;
   const nvidia = sysInfo ? (sysInfo.gpus || []).some((g) => /NVIDIA/i.test(g.name)) : true;
-  monitor.start({
-    baseMhz: base, nvidia,
-    extra: () => ({ ping: pingSession ? pingSession.stats(30) : null, speed: settings.lastSpeed })
-  });
-  monitor.subscribe((s) => {
-    send('monitor:sample', s);
-    if (overlay && !overlay.isDestroyed()) overlay.webContents.send('monitor:sample', s);
-  });
+  monitor.start({ baseMhz: base, nvidia });
+  monitor.subscribe((s) => send('monitor:sample', s));
 }
 
 function ensurePing(host) {
@@ -234,12 +144,8 @@ function registerIpc() {
   });
   handle('app:settings', async (patch) => {
     if (patch) {
-      settings = { ...settings, ...patch, overlay: { ...settings.overlay, ...(patch.overlay || {}), show: { ...settings.overlay.show, ...((patch.overlay || {}).show || {}) } } };
+      settings = { ...settings, ...patch };
       saveSettings();
-      if (patch.overlay) {
-        registerHotkey();
-        if (overlay && !overlay.isDestroyed()) overlay.webContents.send('overlay:config', overlayConfig());
-      }
       if (patch.pingHost && pingSession) ensurePing(patch.pingHost);
     }
     return settings;
@@ -383,7 +289,7 @@ Write-Output ok`);
 
   // Rede
   handle('ping:start', async (host) => { ensureMonitor(); return ensurePing(host).stats(); });
-  handle('ping:stop', async () => { if (pingSession && !(overlay && !overlay.isDestroyed())) { pingSession.stop(); pingSession = null; } return true; });
+  handle('ping:stop', async () => { if (pingSession) { pingSession.stop(); pingSession = null; } return true; });
   handle('ping:stats', async () => (pingSession ? pingSession.stats() : null));
   handle('speed:run', async () => {
     const r = await network.speedTest((p) => send('speed:progress', p));
@@ -391,25 +297,14 @@ Write-Output ok`);
     return r;
   });
 
-  // Monitor / overlay
+  // Monitor
   handle('monitor:start', async () => { ensureMonitor(); return true; });
-  handle('overlay:toggle', async (v) => setOverlay(typeof v === 'boolean' ? v : !(overlay && !overlay.isDestroyed())));
-  handle('overlay:state', async () => !!(overlay && !overlay.isDestroyed()));
-  handle('fps:status', async () => ({ installed: !!monitor.presentMonPath(BIN), running: monitor.isPresentMonRunning() }));
-  handle('fps:download', async () => monitor.downloadPresentMon(BIN, (p) => send('fps:download', p)));
-  handle('fps:start', async () => { ensureMonitor(); return monitor.startPresentMon(); });
-  handle('fps:stop', async () => { monitor.stopPresentMon(); return true; });
-
   // Benchmark
   handle('bench:diskWrite', async (dir) => bench.diskWrite(dir || os.tmpdir(), 1024, (p) => send('bench:disk', p)));
   handle('bench:diskRead', async (letter) => bench.diskRead(letter));
   handle('bench:history', async () => bench.history());
   handle('bench:save', async (r) => bench.saveResult(r));
   handle('bench:delete', async (id) => bench.deleteResult(id));
-
-  ipcMain.on('overlay:resize', (_e, { width, height }) => {
-    if (overlay && !overlay.isDestroyed()) overlay.setBounds(overlayBounds(width, height));
-  });
 }
 
 // ---------------- Autoteste (só para desenvolvimento) ----------------
@@ -507,14 +402,6 @@ async function selfTest(dir) {
     await wait(600); await shot('fb-4-toasts');
     fs.appendFileSync(logFile, '--- fbtest ok\n');
   }
-  if (process.env.HSTECH_OVERLAY) {
-    setOverlay(true);
-    await wait(Math.max(8000, Number(process.env.HSTECH_OVERLAY) || 0));
-    const txt = await overlay.webContents.executeJavaScript(`document.getElementById('box').innerText + ' | [fonte overlay: ' + [...document.fonts].filter(f => f.family.includes('Public Sans')).map(f => f.status).join(',') + ']'`);
-    fs.appendFileSync(logFile, `--- overlay:\n${txt}\n--- bounds: ${JSON.stringify(overlay.getBounds())}\n`);
-    const img = await overlay.webContents.capturePage();
-    fs.writeFileSync(path.join(dir, 'overlay.png'), img.toPNG());
-  }
   quitting = true;
   app.quit();
 }
@@ -530,12 +417,11 @@ app.whenReady().then(async () => {
   registerIpc();
   createWindow();
   createTray();
-  registerHotkey();
   system.getInfo().then((i) => { sysInfo = i; }).catch(() => {});
   if (process.env.HSTECH_SELFTEST) selfTest(process.env.HSTECH_SELFTEST);
   gpu.applyStartup().catch(() => {});
   if (settings.gameWatcher) games.startWatcher((ev) => send('games:applied', ev));
 });
 
-app.on('before-quit', () => { quitting = true; monitor.stop(); hwmon.stop(); if (pingSession) pingSession.stop(); globalShortcut.unregisterAll(); });
+app.on('before-quit', () => { quitting = true; monitor.stop(); hwmon.stop(); if (pingSession) pingSession.stop(); });
 app.on('window-all-closed', () => { if (quitting) app.quit(); });
